@@ -2,13 +2,13 @@
 A travel agency manager
 
 Classes (CRUD)
--Date
--Packets
--Clients
--Agency
--Defs
+- Date
+- Packets
+- Clients
+- Agency
+- Defs
   
 Main
--Files to Classes
+- Files to Classes
   
 Menu
