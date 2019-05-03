@@ -12,3 +12,14 @@
 	#define PLATFORM_NAME "other"
 #endif
 const std::string AGENCY_FILE_NAME = "agency.txt";
+const unsigned char TABLE_PADDING = 4;
+bool clear(){
+	if (PLATFORM_NAME == "linux"){
+		cout << "\033[2J\033[1;1H";
+	}else if (PLATFORM_NAME == "windows"){
+		system("cls");
+	}else{
+		return false;
+	}
+	return true;
+}

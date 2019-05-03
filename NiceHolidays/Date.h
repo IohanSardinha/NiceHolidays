@@ -1,8 +1,8 @@
 #pragma once
-#include "utils.h"
+#include <ctime>
 #include <iostream>
 #include <string>
-#include <ctime>
+#include "utils.h"
 using namespace std;
 int epoch = 2000;
 class Date {														// Class that represents a date (day, month and year)
@@ -34,13 +34,13 @@ class Date {														// Class that represents a date (day, month and year)
 		unsigned short day, month;
 		unsigned year;												// Parts of the date
 };
+string str(Date date);												// Returns a date in the format dd/mm/yyyy
 bool bissextile(unsigned year);										// Verify if the year is bissextile
 bool validDate(unsigned short d, unsigned short m, unsigned y);		// Verify if it is a possible date on Gregorian Calendar
 unsigned short daysMonth(unsigned short month);						// Returns the number of days of a month of a non leap year (Jan = 1 and Dec = 12)
 unsigned daysYear(unsigned year);									// Returns the number of days of a year (365 or 366)
 unsigned abs(const Date date);										// Returns the number of days from the epoch to the date
 Date date(unsigned days);											// Calculates the date from the number of days from epoch
-string str(Date date);												// Returns a date in the format dd/mm/yyyy
 // ----------------------------------------------------------------------------------------
 //                                       Constructors
 // ----------------------------------------------------------------------------------------
@@ -75,16 +75,6 @@ Date::Date(string s){
 // ----------------------------------------------------------------------------------------
 //                                           Gets                                          
 // ----------------------------------------------------------------------------------------
-string str(Date date){
-	string zero = "0";
-	string aux = to_string(date.getDay());
-	string d = zero * (2 - aux.size()) + aux;
-	aux = to_string(date.getMonth());
-	string m = zero * (2 - aux.size()) + aux;
-	aux = to_string(date.getYear());
-	string y = zero * (4 - aux.size()) + aux;
-	return y + "/" + m + "/" + d;
-}
 unsigned Date::getYear() const{
 	return year;
 }
@@ -224,6 +214,16 @@ Date date(unsigned days){
 // ----------------------------------------------------------------------------------------
 //                                    Auxiliary Functions
 // ----------------------------------------------------------------------------------------
+string str(Date date){
+	string zero = "0";
+	string aux = to_string(date.getDay());
+	string d = zero * (2 - aux.size()) + aux;
+	aux = to_string(date.getMonth());
+	string m = zero * (2 - aux.size()) + aux;
+	aux = to_string(date.getYear());
+	string y = zero * (4 - aux.size()) + aux;
+	return y + "/" + m + "/" + d;
+}
 bool bissextile(unsigned year){
 	if (year % 4 == 0){
 		if (year % 100 != 0 || year % 400 == 0) {
