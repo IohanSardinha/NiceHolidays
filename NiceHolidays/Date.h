@@ -6,6 +6,9 @@
 using namespace std;
 int epoch = 2000;
 class Date {														// Class that represents a date (day, month and year)
+	private:														// Private methods and atributes
+		unsigned short day, month;
+		unsigned year;												// Parts of the date
 	public:															// Public methods and atributes
 		Date();														// Constructor that makes the date equal now
 		Date(unsigned short);										// Constructor for a day in this month
@@ -30,9 +33,6 @@ class Date {														// Class that represents a date (day, month and year)
 		bool operator<=(const Date) const;							// Verifies if the date is before or equal the parameter
 		bool operator>=(const Date) const;							// Verifies if the date is after or equal the parameter
 		bool operator!=(const Date) const;							// Verifies if the date is different from the parameter
-	private:														// Private methods and atributes
-		unsigned short day, month;
-		unsigned year;												// Parts of the date
 };
 string str(Date date);												// Returns a date in the format dd/mm/yyyy
 bool bissextile(unsigned year);										// Verify if the year is bissextile

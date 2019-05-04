@@ -1,78 +1,78 @@
 #include "Address.h"
 
 
-Address::Address(){
+Address::Address() {
 }
 
-Address::Address(string street, unsigned short doorNumber, string floor, string postalCode, string location){
+Address::Address(string street, unsigned short doorNumber, string floor, string postalCode, string location) {
 
-  // REQUIRES IMPLEMENTATION
+	// REQUIRES IMPLEMENTATION
 }
 
-  // metodos GET
+// metodos GET
 
 
-string Address::getStreet() const{
+string Address::getStreet() const {
 
-  // REQUIRES IMPLEMENTATION
+	return street;
 }
 
-unsigned short Address::getDoorNumber() const{
+unsigned short Address::getDoorNumber() const {
 
-  // REQUIRES IMPLEMENTATION
+	return doorNumber;
 }
 
-string Address::getFloor() const{
-  
-  // REQUIRES IMPLEMENTATION
+string Address::getFloor() const {
+
+	return floor;
 }
 
-string Address::getPostalCode() const{
+string Address::getPostalCode() const {
 
-  // REQUIRES IMPLEMENTATION
+	return postalCode;
 }
 
-string Address::getLocation() const{
+string Address::getLocation() const {
 
-  // REQUIRES IMPLEMENTATION
+	return location;
 }
 
 
-  // metodos SET
+// metodos SET
 
-void Address::setStreet(string street){
+void Address::setStreet(string street) {
 
-  // REQUIRES IMPLEMENTATION
+	this->street = street;
 }
 
-void Address::setDoorNumber(unsigned short doorNumber){
+void Address::setDoorNumber(unsigned short doorNumber) {
 
-  // REQUIRES IMPLEMENTATION
+	this->doorNumber = doorNumber;
 }
 
-void Address::setFloor(string floor){
+void Address::setFloor(string floor) {
 
-  // REQUIRES IMPLEMENTATION
+	this->floor = floor;
 }
 
-void Address::setPostalCode(string postalCode){
+void Address::setPostalCode(string postalCode) {
 
-  // REQUIRES IMPLEMENTATION
+	this->postalCode = postalCode;
 }
 
-void Address::setLocation(string  location){
+void Address::setLocation(string  location) {
 
-  // REQUIRES IMPLEMENTATION
+	this->location = location;
 }
 
 
 /*********************************
- * Mostrar Address
- ********************************/  
+* Mostrar Address
+********************************/
 
 // discplyes an address in a nice format
-ostream& operator<<(ostream& out, const Address & address){
+ostream& operator<<(ostream& out, const Address & address) {
 
-  // REQUIRES IMPLEMENTATION
+	// REQUIRES IMPLEMENTATION
 
 }

@@ -9,6 +9,15 @@
 #include "Date.h"
 using namespace std;
 class Packet{
+	private:
+		static unsigned long numPackets;							// 
+		string id; 													// packet unique identifier
+		vector<string> sites; 										// touristic sites to visit
+		Date begin;  												// begin date
+		Date end;  													// end date
+		double pricePerPerson; 										// price per person
+		unsigned soldPlaces; 										// number of sold places
+		unsigned maxPlaces; 										// number of places still available in the packet (updated whenever the packet is sold to a new client)
 	public:
 		Packet(vector<string>, Date, Date, double, unsigned);		// 
 		string getId() const;										// 
@@ -26,15 +35,6 @@ class Packet{
 		bool setMaxPlaces(unsigned);								// 
 		friend ostream& operator<<(ostream&, const Packet&);		// 
 		friend ofstream& operator<<(ofstream&, const Packet&);		// 
-	private:
-		static unsigned long numPackets;							// 
-		string id; 													// packet unique identifier
-		vector<string> sites; 										// touristic sites to visit
-		Date begin;  												// begin date
-		Date end;  													// end date
-		double pricePerPerson; 										// price per person
-		unsigned soldPlaces; 										// number of sold places
-		unsigned maxPlaces; 										// number of places still available in the packet (updated whenever the packet is sold to a new client)
 };
 string str(Packet packet);											// 
 // ----------------------------------------------------------------------------------------
