@@ -12,6 +12,7 @@
 	#define PLATFORM_NAME "other"
 #endif
 const std::string AGENCY_FILE_NAME = "agency.txt";
+const std::string SEPARATOR = "::::::::::";
 const unsigned char TABLE_PADDING = 4;
 bool clear(){
 	if (PLATFORM_NAME == "linux"){
