@@ -1,78 +1,79 @@
 #include "Address.h"
-
-
-Address::Address() {
+// ----------------------------------------------------------------------------------------
+//                                       Constructors
+// ----------------------------------------------------------------------------------------
+Address::Address(string s, unsigned short n, string f, string c, string l) {
+	street = s;
+	doorNumber = n;
+	floor = f;
+	postalCode = c;
+	location = l;
 }
-
-Address::Address(string street, unsigned short doorNumber, string floor, string postalCode, string location) {
-
-	// REQUIRES IMPLEMENTATION
-}
-
-// metodos GET
-
-
+// ----------------------------------------------------------------------------------------
+//                                           Gets                                          
+// ----------------------------------------------------------------------------------------
 string Address::getStreet() const {
-
 	return street;
 }
-
 unsigned short Address::getDoorNumber() const {
-
 	return doorNumber;
 }
-
 string Address::getFloor() const {
-
 	return floor;
 }
-
 string Address::getPostalCode() const {
-
 	return postalCode;
 }
-
 string Address::getLocation() const {
-
 	return location;
 }
-
-
-// metodos SET
-
-void Address::setStreet(string street) {
-
-	this->street = street;
+// ----------------------------------------------------------------------------------------
+//                                           Sets                                          
+// ----------------------------------------------------------------------------------------
+bool Address::setStreet(string street) {
+	this -> street = street;
+	return true;
 }
-
-void Address::setDoorNumber(unsigned short doorNumber) {
-
-	this->doorNumber = doorNumber;
+bool Address::setDoorNumber(unsigned short doorNumber) {
+	this -> doorNumber = doorNumber;
+	return true;
 }
-
-void Address::setFloor(string floor) {
-
-	this->floor = floor;
+bool Address::setFloor(string floor) {
+	this -> floor = floor;
+	return true;
 }
-
-void Address::setPostalCode(string postalCode) {
-
-	this->postalCode = postalCode;
+bool Address::setPostalCode(string postalCode) {
+	this -> postalCode = postalCode;
+	return true;
 }
-
-void Address::setLocation(string  location) {
-
-	this->location = location;
+bool Address::setLocation(string location) {
+	this -> location = location;
+	return true;
 }
-
-
-/*********************************
-* Mostrar Address
-********************************/
-
-// discplyes an address in a nice format
-ostream& operator<<(ostream& out, const Address & address) {
-
-	// REQUIRES IMPLEMENTATION
-
+// ----------------------------------------------------------------------------------------
+//                                  Input Output Functions                                 
+// ----------------------------------------------------------------------------------------
+ostream& operator<<(ostream& out, const Address& address) {
+	out << str(address);
+	return out;
+}
+ofstream& operator<<(ofstream& out, const Address& address) {
+	out << address.getStreet() << " / ";
+	out << address.getDoorNumber() << " / ";
+	out << address.getFloor() << " / ";
+	out << address.getPostalCode() << " / ";
+	out << address.getLocation();
+	return out;
+}
+string str(Address address) {
+	ostringstream res;
+	res << address.getStreet() << ", ";
+	res << address.getDoorNumber();
+	if (address.getFloor() != "-"){
+		res << " " << address.getFloor();
+	}
+	res << ", ";
+	res << address.getLocation() << ", ";
+	res << address.getPostalCode();
+	return res.str();
 }

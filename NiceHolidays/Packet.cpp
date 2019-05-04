@@ -1,74 +1,117 @@
 #include "Packet.h"
-
-Packet::Packet(vector<string> sites, Date inicio, Date fim, double precoPessoa, unsigned maxPessoas){
-
+// ----------------------------------------------------------------------------------------
+//                                       Constructors
+// ----------------------------------------------------------------------------------------
+unsigned long Packet::numPackets = 0;
+Packet::Packet(vector<string> s, Date b, Date e, double p, unsigned m){
+	numPackets++;
+	id = to_string(numPackets);
+	sites = s;
+	begin = b;
+	end = e;
+	pricePerPerson = p;
+	soldPlaces = 0;
+	maxPlaces = m;
 }
-
-  // metodos GET
-
-unsigned Packet::getId() const{
-    return id;
+// ----------------------------------------------------------------------------------------
+//                                           Gets                                          
+// ----------------------------------------------------------------------------------------
+string Packet::getId() const {
+	return id;
 }
-vector<string> Packet::getSites() const{
-    return sites;
+vector<string> Packet::getSites() const {
+	return sites;
 }
-Date Packet::getBeginDate() const{
-    return begin;
+Date Packet::getBeginDate() const {
+	return begin;
 }
-Date Packet::getEndDate() const{
-
-  // REQUIRES IMPLEMENTATION
+Date Packet::getEndDate() const {
+	return end;
 }
-
-double Packet::getPricePerPerson() const{
-
-  // REQUIRES IMPLEMENTATION
+double Packet::getPricePerPerson() const {
+	return pricePerPerson;
 }
-
-unsigned Packet::getMaxPersons() const{
-
-  // REQUIRES IMPLEMENTATION
+unsigned Packet::getSoldPlaces() const {
+	return soldPlaces;
 }
-
-  // metodos SET
-
-void Packet::setId(unsigned id){
-
-  // REQUIRES IMPLEMENTATION
+unsigned Packet::getMaxPlaces() const {
+	return maxPlaces;
 }
-
-void Packet::setSites(vector<string> sites){
-
-  // REQUIRES IMPLEMENTATION
+// ----------------------------------------------------------------------------------------
+//                                           Sets                                          
+// ----------------------------------------------------------------------------------------
+bool Packet::setId(string i) {
+	id = i;
+	return true;
 }
-
-void Packet::setBeginDate(Date begin){
-
-  // REQUIRES IMPLEMENTATION
+bool Packet::setSites(vector<string> s) {
+	sites = s;
+	return true;
 }
-
-void Packet::setEndDate(Date end){
-
-  // REQUIRES IMPLEMENTATION
+bool Packet::setBeginDate(Date b) {
+	begin = b;
+	return true;
 }
-
-void Packet::setPricePerPerson(double pricePerPerson){
-
-  // REQUIRES IMPLEMENTATION
+bool Packet::setEndDate(Date e) {
+	end = e;
+	return true;
 }
-
-void Packet::setMaxPersons(unsigned maxPersons){
-
-  // REQUIRES IMPLEMENTATION
+bool Packet::setPricePerPerson(double p) {
+	pricePerPerson = p;
+	return true;
 }
-
-
-/*********************************
- * Show Packet information
- ********************************/  
-
-// shows a packet content 
-ostream& operator<<(ostream& out, const Packet & packet){
-
-  // REQUIRES IMPLEMENTATION
+bool Packet::setMaxPlaces(unsigned m) {
+	maxPlaces = m;
+	return true;
+}
+// ----------------------------------------------------------------------------------------
+//                                  Input Output Functions                                 
+// ----------------------------------------------------------------------------------------
+ostream& operator<<(ostream& out, const Packet& packet) {
+	out << str(packet);
+	return out;
+}
+ofstream& operator<<(ofstream& out, const Packet& packet) {
+	out << packet.getId() << '\n';
+	out << packet.getSites().at(0);
+	if (packet.getSites().size() > 1){
+		out << " - ";
+		bool first = true;
+		for (unsigned i = 1; i < packet.getSites().size(); ++i){
+			if (!first)
+				out << ", ";
+			else
+				first = false;
+			out << packet.getSites().at(i);
+		}
+	}
+	out << '\n';
+	out << packet.getBeginDate() << '\n';
+	out << packet.getEndDate() << '\n';
+	out << packet.getPricePerPerson() << '\n';
+	out << packet.getSoldPlaces() + packet.getMaxPlaces() << '\n';
+	out << packet.getMaxPlaces();
+	return out;
+}
+// ----------------------------------------------------------------------------------------
+//                                    Auxiliary Functions
+// ----------------------------------------------------------------------------------------
+string str(Packet packet) {
+	ostringstream res;
+	res << "ID    : " << packet.getId() << "\n";
+	res << "Sites : ";
+	bool first = true;
+	for (const auto& site : packet.getSites()){
+		if (!first)
+			res << ", ";
+		else
+			first = false;
+		res << site;
+	}
+	res << '\n';
+	res << "Begin : " << packet.getBeginDate() << '\n';
+	res << "End   : " << packet.getEndDate() << '\n';
+	res << "Price : " << fixed << setprecision(2) << packet.getPricePerPerson() << '\n';
+	res << "Places: " << packet.getMaxPlaces();
+	return res.str();
 }
