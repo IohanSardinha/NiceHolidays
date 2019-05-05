@@ -1,7 +1,15 @@
+#pragma once
 #include "Address.h"
 // ----------------------------------------------------------------------------------------
 //                                       Constructors
 // ----------------------------------------------------------------------------------------
+Address::Address() {
+	street = "Unnamed Street";
+	doorNumber = 0;
+	floor = "-";
+	postalCode = "0000-000";
+	location = "Unnamed Location";
+}
 Address::Address(string s, unsigned short n, string f, string c, string l) {
 	street = s;
 	doorNumber = n;
