@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <iostream>
 #if defined(_WIN32)
     #define PLATFORM_NAME "windows" // Windows
 #elif defined(_WIN64)
@@ -11,10 +12,11 @@
 #else
 	#define PLATFORM_NAME "other"
 #endif
+using namespace std;
 const std::string AGENCY_FILE_NAME = "agency.txt";
 const std::string SEPARATOR = "::::::::::";
 const unsigned char TABLE_PADDING = 4;
-bool clear(){
+inline bool clear(){
 	if (PLATFORM_NAME == "linux"){
 		cout << "\033[2J\033[1;1H";
 	}else if (PLATFORM_NAME == "windows"){

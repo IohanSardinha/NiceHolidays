@@ -1,74 +1,50 @@
+#pragma once
 #include "Agency.h"
-
-
-
 Agency::Agency(string fileName){
 
   //  IMPLEMENTATION REQUIRED 
 }
-
-  // metodos GET
 string Agency::getName() const{
-
-  //  IMPLEMENTATION REQUIRED 
+	return name;
 }
-
 unsigned Agency::getVATnumber() const{
-
-  //  IMPLEMENTATION REQUIRED 
+	return VATnumber;
 }
-
 Address Agency::getAddress() const{
-
-  //  IMPLEMENTATION REQUIRED 
+	return address;
 }
-
 string Agency::getURL() const{
-
-  //  IMPLEMENTATION REQUIRED 
+	return URL;
 }
-
 vector<Client> Agency::getClients() const{
-
-  //  IMPLEMENTATION REQUIRED 
+	return clients;
 }
-
 vector<Packet> Agency::getPackets() const{
-
-  //  IMPLEMENTATION REQUIRED 
+	return packets;
 }
-
-  
-  // SET Methods
-
-void Agency::setName(string name){
-
-  //  IMPLEMENTATION REQUIRED 
+bool Agency::setName(string name){
+	this->name = name;
+	return true;
 }
-
-void Agency::setVATnumber(unsigned VATnumber){
-
-  //  IMPLEMENTATION REQUIRED 
+bool Agency::setVATnumber(unsigned VATnumber){
+	this->VATnumber = VATnumber;
+	return true;
 }
-
-void Agency::setAddress(Address address){
-
-  //  IMPLEMENTATION REQUIRED 
+bool Agency::setAddress(Address address){
+	this -> address = address;
+	return true;
 }
-  void Agency::setURL(string url){
-
-  //  IMPLEMENTATION REQUIRED 
-
+bool Agency::setURL(string url){
+	this -> URL = url;
+	return true;
 }
-  void Agency::setClients(vector<Client> & clients){
-
-  //  IMPLEMENTATION REQUIRED 
-
-  }
-  void Agency::setPackets(vector<Packet> & packets){
-
-  //  IMPLEMENTATION REQUIRED 
-
+bool Agency::setClients(vector<Client> & clients){
+	this -> clients = clients;
+	return true;
+}
+bool Agency::setPackets(vector<Packet> & packets){
+  	this -> packets = packets;
+  	return true;
 }
 
 /*********************************
@@ -77,6 +53,6 @@ void Agency::setAddress(Address address){
 
 // mostra o conteudo de uma agencia
 ostream& operator<<(ostream& out, const Agency & agency){
-
-  // A IMPLEMENTATION REQUIRED 
+	out << agency.name;
+	return out;
 }

@@ -108,7 +108,7 @@ void Date::operator+=(unsigned n) {
 	year = res.getYear();
 }
 void Date::operator-=(unsigned n) {
-	*this += -n;
+	*this += -(int)n;
 }
 int Date::operator-(const Date param) const {
 	Date x(day, month, year);

@@ -10,13 +10,13 @@ class Table{
 		vector<string> header;										//
 		vector<vector<string>> content;								//
 	public:
-		Table();													// 
-		Table(vector<string>, vector<vector<string>>);				// 
-		vector<string> getHeader() const;
-		vector<vector<string>> getContent() const;
-		bool setHeader(vector<string>);
-		bool setContent(vector<vector<string>>);
-		friend ostream& operator<<(ostream&, const Table&);			// 
+		inline Table();												// 
+		inline Table(vector<string>, vector<vector<string>>);		// 
+		inline vector<string> getHeader() const;					//
+		inline vector<vector<string>> getContent() const;			//
+		inline bool setHeader(vector<string>);						//
+		inline bool setContent(vector<vector<string>>);				//
+		inline friend ostream& operator<<(ostream&, const Table&);	// 
 };
-string normalize(string s, unsigned n);								//
-string str(Table table);
+inline string normalize(string s, unsigned n);								//
+inline string str(Table table);
