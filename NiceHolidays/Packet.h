@@ -19,21 +19,21 @@ class Packet{
 		unsigned soldPlaces; 										// number of sold places
 		unsigned maxPlaces; 										// number of places still available in the packet (updated whenever the packet is sold to a new client)
 	public:
-		inline Packet(vector<string>, Date, Date, double, unsigned);		// 
-		inline string getId() const;										// 
-		inline vector<string> getSites() const;							// 
-		inline Date getBeginDate() const;									// 
-		inline Date getEndDate() const;									// 
-		inline double getPricePerPerson() const;							// 
-		inline unsigned getSoldPlaces() const;								// 
-		inline unsigned getMaxPlaces() const;								// 
-		inline bool setId(string);  										// to set negatve if "deprecated"
-		inline bool setSites(vector<string>);								// 
-		inline bool setBeginDate(Date);									// 
-		inline bool setEndDate(Date);										// 
-		inline bool setPricePerPerson(double);								// 
-		inline bool setMaxPlaces(unsigned);								// 
-		inline friend ostream& operator<<(ostream&, const Packet&);		// 
-		inline friend ofstream& operator<<(ofstream&, const Packet&);		// 
+		Packet(vector<string>, Date, Date, double, unsigned);		// 
+		string getId() const;										// 
+		vector<string> getSites() const;							// 
+		Date getBeginDate() const;									// 
+		Date getEndDate() const;									// 
+		double getPricePerPerson() const;							// 
+		unsigned getSoldPlaces() const;								// 
+		unsigned getMaxPlaces() const;								// 
+		bool setId(string);  										// to set negatve if "deprecated"
+		bool setSites(vector<string>);								// 
+		bool setBeginDate(Date);									// 
+		bool setEndDate(Date);										// 
+		bool setPricePerPerson(double);								// 
+		bool setMaxPlaces(unsigned);								// 
+		friend ostream& operator<<(ostream&, const Packet&);		// 
+		friend ofstream& operator<<(ofstream&, const Packet&);		// 
 };
-inline string str(Packet packet);											// 
+string str(Packet packet);											// 

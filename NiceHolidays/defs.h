@@ -16,7 +16,7 @@ using namespace std;
 const std::string AGENCY_FILE_NAME = "agency.txt";
 const std::string SEPARATOR = "::::::::::";
 const unsigned char TABLE_PADDING = 4;
-inline bool clear(){
+bool clear(){
 	if (PLATFORM_NAME == "linux"){
 		cout << "\033[2J\033[1;1H";
 	}else if (PLATFORM_NAME == "windows"){

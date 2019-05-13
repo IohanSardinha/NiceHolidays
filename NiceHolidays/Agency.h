@@ -20,18 +20,18 @@ class Agency{
 		unsigned int maxClientsId; // maximum value among all clients identifiers
 		unsigned int maxPacketsId; // maximum value among all packets identifiers
 	public:
-		inline Agency(string fileName);
-		inline string getName() const;
-		inline unsigned getVATnumber() const;
-		inline Address getAddress() const;
-		inline string getURL() const;
-		inline vector<Client> getClients() const;
-		inline vector<Packet> getPackets() const;
-		inline bool setName(string name);
-		inline bool setVATnumber(unsigned VATnumber);
-		inline bool setAddress(Address address);
-		inline bool setURL(string url);
-		inline bool setClients(vector<Client> & clients);
-		inline bool setPackets(vector<Packet> & packets);
-		inline friend ostream& operator<<(ostream& out, const Agency & agency);
+		Agency(string fileName);
+		string getName() const;
+		unsigned getVATnumber() const;
+		Address getAddress() const;
+		string getURL() const;
+		vector<Client> getClients() const;
+		vector<Packet> getPackets() const;
+		bool setName(string name);
+		bool setVATnumber(unsigned VATnumber);
+		bool setAddress(Address address);
+		bool setURL(string url);
+		bool setClients(vector<Client> & clients);
+		bool setPackets(vector<Packet> & packets);
+		friend ostream& operator<<(ostream& out, const Agency & agency);
 };
