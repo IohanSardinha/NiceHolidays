@@ -17,6 +17,7 @@ class Client{
 		vector<Packet> packets; 														// vector to store client's packets bought
 		unsigned totalPurchased; 														// total value spent by the client
 	public:
+		inline Client();
 		inline Client(string, unsigned, unsigned short, Address);  							// for a new client
 		inline Client(string, unsigned, unsigned short, Address, vector<Packet>&, unsigned);  	// client read from file
 		inline string getName() const;

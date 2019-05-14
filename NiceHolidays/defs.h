@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include "Packet.h"
 #if defined(_WIN32)
     #define PLATFORM_NAME "windows" // Windows
 #elif defined(_WIN64)

@@ -3,6 +3,9 @@
 // ----------------------------------------------------------------------------------------
 //                                       Constructors
 // ----------------------------------------------------------------------------------------
+
+Client::Client(){}
+
 Client::Client(string name, unsigned VATnumber, unsigned short familySize, Address address) {
 	this -> name = name;
 	this -> VATnumber = VATnumber;

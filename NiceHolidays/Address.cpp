@@ -13,9 +13,8 @@ Address::Address() {
 	location = "Unnamed Location";
 }
 
-Address::Address(string s)
+Address::Address(vector<string> aux)
 {
-	vector<string> aux = split(s,"/");
 	street = aux.at(0);
 	doorNumber = stoi(aux.at(1));
 	floor = aux.at(2);
