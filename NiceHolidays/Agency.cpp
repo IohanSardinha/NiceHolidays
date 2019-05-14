@@ -1,9 +1,15 @@
 #pragma once
 #include "Agency.h"
+// ----------------------------------------------------------------------------------------
+//                                       Constructors
+// ----------------------------------------------------------------------------------------
 Agency::Agency(string fileName){
 
   //  IMPLEMENTATION REQUIRED 
 }
+// ----------------------------------------------------------------------------------------
+//                                           Gets                                          
+// ----------------------------------------------------------------------------------------
 string Agency::getName() const{
 	return name;
 }
@@ -22,6 +28,9 @@ vector<Client> Agency::getClients() const{
 vector<Packet> Agency::getPackets() const{
 	return packets;
 }
+// ----------------------------------------------------------------------------------------
+//                                           Sets                                          
+// ----------------------------------------------------------------------------------------
 bool Agency::setName(string name){
 	this->name = name;
 	return true;
@@ -46,12 +55,9 @@ bool Agency::setPackets(vector<Packet> & packets){
   	this -> packets = packets;
   	return true;
 }
-
-/*********************************
- * Mostrar Loja
- ********************************/  
-
-// mostra o conteudo de uma agencia
+// ----------------------------------------------------------------------------------------
+//                                  Input Output Functions                                 
+// ----------------------------------------------------------------------------------------
 ostream& operator<<(ostream& out, const Agency & agency){
 	out << agency.name;
 	return out;
