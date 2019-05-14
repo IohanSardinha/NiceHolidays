@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------------------
 //                                       Constructors
 // ----------------------------------------------------------------------------------------
-unsigned long Packet::numPackets = 0;
 Packet::Packet(vector<string> s, Date b, Date e, double p, unsigned m){
 	numPackets++;
 	id = to_string(numPackets);
