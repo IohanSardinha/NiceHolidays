@@ -16,7 +16,7 @@ using namespace std;
 const std::string AGENCY_FILE_NAME = "agency.txt";
 const std::string SEPARATOR = "::::::::::";
 const unsigned char TABLE_PADDING = 4;
-bool clear(){
+inline bool clear(){
 	if (PLATFORM_NAME == "linux"){
 		cout << "\033[2J\033[1;1H";
 	}else if (PLATFORM_NAME == "windows"){
@@ -25,4 +25,22 @@ bool clear(){
 		return false;
 	}
 	return true;
+}
+
+//Splits a string by a specific delimiter and puts it into a vector
+inline vector<string> split(string str, string delimiter)
+{
+	vector<string> result;
+	size_t pos = 0;
+	string token;
+	pos = str.find(delimiter);
+	while (pos != str.npos)
+	{
+		token = str.substr(0, pos);
+		result.push_back(token);
+		str.erase(0, pos + delimiter.length());
+		pos = str.find(delimiter);
+	}
+	result.push_back(str);
+	return result;
 }

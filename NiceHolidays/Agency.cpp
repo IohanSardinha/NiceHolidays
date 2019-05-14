@@ -2,7 +2,22 @@
 #include "Agency.h"
 Agency::Agency(string fileName){
 
-  //  IMPLEMENTATION REQUIRED 
+	ifstream file(fileName);
+	if (file.is_open())
+	{
+		string line;
+		getline(file, name);
+		getline(file, line);
+		VATnumber = stoi(line);
+		getline(file, URL);
+		getline(file, line);
+		address = Address(line);
+
+	}
+	else
+	{
+		throw exception("Could not open agency file");
+	}
 }
 string Agency::getName() const{
 	return name;

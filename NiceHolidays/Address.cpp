@@ -12,6 +12,17 @@ Address::Address() {
 	postalCode = "0000-000";
 	location = "Unnamed Location";
 }
+
+Address::Address(string s)
+{
+	vector<string> aux = split(s,"/");
+	street = aux.at(0);
+	doorNumber = stoi(aux.at(1));
+	floor = aux.at(2);
+	postalCode = aux.at(3);
+	location = aux.at(4);
+}
+
 Address::Address(string s, unsigned short n, string f, string c, string l) {
 	street = s;
 	doorNumber = n;
@@ -68,7 +79,8 @@ ostream& operator<<(ostream& out, const Address& address) {
 	return out;
 }
 ofstream& operator<<(ofstream& out, const Address& address) {
-	out << address.getStreet() << " / ";
+	out << address.getStreet();
+
 	out << address.getDoorNumber() << " / ";
 	out << address.getFloor() << " / ";
 	out << address.getPostalCode() << " / ";

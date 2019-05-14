@@ -4,8 +4,8 @@
 #include <stdexcept>
 #include <string>
 #include "utils.h"
+#define epoch 2000
 using namespace std;
-int epoch = 2000;
 class Date {														// Class that represents a date (day, month and year)
 	private:														// Private methods and atributes
 		unsigned short day, month;

@@ -15,6 +15,7 @@ class Address{
 		string location; 											// site
 	public:															// 
 		inline Address();													// 
+		inline Address(string);
 		inline Address(string, unsigned short, string, string, string);	// 
 		inline string getStreet() const;									// 
 		inline unsigned short getDoorNumber() const;						// 

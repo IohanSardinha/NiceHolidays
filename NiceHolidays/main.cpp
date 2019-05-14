@@ -22,5 +22,6 @@ int main() {
 	f << packet << '\n' << SEPARATOR << '\n';
 	f << client << '\n' << SEPARATOR << '\n';
 	f.close();
+	system("pause");
 	return 0;
 }
