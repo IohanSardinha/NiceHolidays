@@ -101,7 +101,7 @@ ofstream& operator<<(ofstream& out, const Packet& packet) {
 	out << packet.getEndDate() << '\n';
 	out << packet.getPricePerPerson() << '\n';
 	out << packet.getSoldPlaces() + packet.getMaxPlaces() << '\n';
-	out << packet.getMaxPlaces();
+	out << packet.getMaxPlaces() << endl;
 	return out;
 }
 // ----------------------------------------------------------------------------------------

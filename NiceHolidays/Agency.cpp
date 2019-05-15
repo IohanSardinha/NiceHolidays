@@ -1,5 +1,18 @@
 #pragma once
+#include <iostream>
 #include "Agency.h"
+
+inline Packet getPacketById(vector<Packet> pckts, unsigned id)
+{
+	for (Packet pckt : pckts)
+	{
+		if (abs(stoi(pckt.getId())) == id)
+		{
+			return pckt;
+		}
+	}
+    return Packet();
+}
 
 inline vector<Packet> readPackets(string packets_file)
 {
@@ -13,11 +26,11 @@ inline vector<Packet> readPackets(string packets_file)
 	if (file.is_open())
 	{
 		getline(file, line);
-		
+
 
 		while (getline(file, line))
 		{
-			vector<string> date;
+			vector<string> splittedLine;
 			switch (pos)
 			{
 			case 0:
@@ -29,19 +42,31 @@ inline vector<Packet> readPackets(string packets_file)
 				break;
 
 			case 1:
-				//current.places = line;
+				splittedLine = split(line, "-");
+				if (splittedLine.size() > 1)
+				{
+					vector<string> v = { splittedLine.at(0) };
+					vector<string> v2 = split(splittedLine.at(1), ",");
+					v.insert(v.begin(), v2.begin(), v2.end());
+					current.setSites(v);
+				}
+				else
+				{
+					current.setSites(vector<string>({ splittedLine.at(0)}));
+				}
+				
 				if (!start)
 					start = true;
 				break;
 
 			case 2:
-				date = split(line, "/");
-				current.setBeginDate(Date(stoi(date.at(2)),stoi(date.at(1)),stoi(date.at(0))));
+				splittedLine = split(line, "/");
+				current.setBeginDate(Date(stoi(splittedLine.at(2)),stoi(splittedLine.at(1)),stoi(splittedLine.at(0))));
 				break;
 
 			case 3:
-				date = split(line, "/");
-				current.setEndDate(Date(stoi(date.at(2)), stoi(date.at(1)), stoi(date.at(0))));
+				splittedLine = split(line, "/");
+				current.setEndDate(Date(stoi(splittedLine.at(2)), stoi(splittedLine.at(1)), stoi(splittedLine.at(0))));
 				break;
 
 			case 4:
@@ -60,11 +85,15 @@ inline vector<Packet> readPackets(string packets_file)
 		}
 		travel_packs.push_back(current);
 	}
+	else
+	{
+		cout << "Could not open file " << packets_file << endl;
+	}
 
 	return travel_packs;
 }
 
-inline vector<Client> readClients(string clients_file)
+inline vector<Client> readClients(string clients_file, vector<Packet> packets)
 {
 	string line;
 	ifstream file(clients_file);
@@ -77,6 +106,8 @@ inline vector<Client> readClients(string clients_file)
 	{
 		while (getline(file, line))
 		{
+			vector<string> packsIds;
+			vector<Packet> currentPackets;
 			switch (pos)
 			{
 			case 0:
@@ -98,12 +129,25 @@ inline vector<Client> readClients(string clients_file)
 				current.setAddress(split(line,"/"));
 				break;
 			case 4:
-				//current.setPacketList(split(line, ";"));
+				packsIds = split(line, ";");
+				for (size_t i = 0; i < packsIds.size(); i++)
+				{
+					currentPackets.push_back(getPacketById(packets, stoi(packsIds.at(i))));
+				}
+				current.setPacketList(currentPackets);
+				currentPackets.clear();
+				break;
+			case 5:
+				current.setTotalPurchased(stoi(line));
 				break;
 			}
-			pos = (pos + 1) % 6;
+			pos = (pos + 1) % 7;
 		}
 		clients.push_back(current);
+	}
+	else
+	{
+		cout << "Could not open file " << clients_file << endl;
 	}
 
 	return clients;
@@ -125,14 +169,13 @@ Agency::Agency(string fileName){
 		getline(file, clientsFile);
 		getline(file, line);
 		packets = readPackets(line);
-		//clients = readClients(clientsFile,packets);
-
+		clients = readClients(clientsFile,packets);
 		file.close();
 	}
 	else
 	{
 		file.close();
-		throw exception("Could not open agency file");
+		cout << "Could not open agency file";
 	}
 }
 string Agency::getName() const{
@@ -180,10 +223,15 @@ bool Agency::setPackets(vector<Packet> & packets){
 
 /*********************************
  * Mostrar Loja
- ********************************/  
+ ********************************/
 
 // mostra o conteudo de uma agencia
 ostream& operator<<(ostream& out, const Agency & agency){
-	out << agency.name;
+	out << agency.name << endl;
+	out << agency.VATnumber << endl;
+	out << agency.URL << endl;
+	out << agency.address << endl;
+	out << agency.clients.size() << " Clients" << endl;
+	out << agency.packets.size() << " Packets" << endl;
 	return out;
 }
