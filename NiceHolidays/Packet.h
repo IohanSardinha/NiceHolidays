@@ -22,10 +22,12 @@ class Packet{
 		inline Packet();
 		inline Packet(vector<string>, Date, Date, double, unsigned);		// 
 		inline string getId() const;										// 
+		inline unsigned long getNumPackets() const;
 		inline vector<string> getSites() const;							// 
 		inline Date getBeginDate() const;									// 
 		inline Date getEndDate() const;									// 
 		inline double getPricePerPerson() const;							// 
+		inline bool setNumPacket(unsigned long);
 		inline unsigned getSoldPlaces() const;								// 
 		inline unsigned getMaxPlaces() const;								// 
 		inline bool setId(string);  										// to set negatve if "deprecated"

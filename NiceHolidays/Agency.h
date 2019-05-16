@@ -11,6 +11,8 @@ class Agency{
 	private:
 		string name; // name of the  agency
 		unsigned int VATnumber; // VAT number of the agency
+		string clientsFile;
+		string packetsFile;
 		Address address; // address of the agency
 		string URL; // URL of the agency Web site
 		vector<Client> clients; // vector to store the existing clients
@@ -21,6 +23,8 @@ class Agency{
 		unsigned int maxPacketsId; // maximum value among all packets identifiers
 	public:
 		inline Agency(string fileName);
+		inline string getClientsFile() const;
+		inline string getPacketsFile() const;
 		inline string getName() const;
 		inline unsigned getVATnumber() const;
 		inline Address getAddress() const;

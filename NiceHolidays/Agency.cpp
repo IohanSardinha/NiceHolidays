@@ -2,10 +2,6 @@
 #include <iostream>
 #include "Agency.h"
 
-// ----------------------------------------------------------------------------------------
-//                                       Constructors
-// ----------------------------------------------------------------------------------------
-
 
 inline Packet getPacketById(vector<Packet> pckts, unsigned id)
 {
@@ -31,7 +27,7 @@ inline vector<Packet> readPackets(string packets_file)
 	if (file.is_open())
 	{
 		getline(file, line);
-
+		Packet().setNumPacket(stoi(line));
 
 		while (getline(file, line))
 		{
@@ -52,7 +48,10 @@ inline vector<Packet> readPackets(string packets_file)
 				{
 					vector<string> v = { splittedLine.at(0) };
 					vector<string> v2 = split(splittedLine.at(1), ",");
-					v.insert(v.begin(), v2.begin(), v2.end());
+					for (string s : v2)
+					{
+						v.push_back(s);
+					}
 					current.setSites(v);
 				}
 				else
@@ -112,7 +111,7 @@ inline vector<Client> readClients(string clients_file, vector<Packet> packets)
 		while (getline(file, line))
 		{
 			vector<string> packsIds;
-			vector<Packet> currentPackets;
+			vector<Packet> currentPackets = {};
 			switch (pos)
 			{
 			case 0:
@@ -135,9 +134,12 @@ inline vector<Client> readClients(string clients_file, vector<Packet> packets)
 				break;
 			case 4:
 				packsIds = split(line, ";");
-				for (size_t i = 0; i < packsIds.size(); i++)
+				if (!(packsIds.size() == 1 && packsIds.at(0).empty()))
 				{
-					currentPackets.push_back(getPacketById(packets, stoi(packsIds.at(i))));
+					for (size_t i = 0; i < packsIds.size(); i++)
+					{
+						currentPackets.push_back(getPacketById(packets, stoi(packsIds.at(i))));
+					}
 				}
 				current.setPacketList(currentPackets);
 				currentPackets.clear();
@@ -157,7 +159,9 @@ inline vector<Client> readClients(string clients_file, vector<Packet> packets)
 
 	return clients;
 }
-
+// ----------------------------------------------------------------------------------------
+//                                       Constructors
+// ----------------------------------------------------------------------------------------
 Agency::Agency(string fileName){
 
 	ifstream file(fileName);
@@ -174,6 +178,8 @@ Agency::Agency(string fileName){
 		getline(file, clientsFile);
 		getline(file, line);
 		packets = readPackets(line);
+		packetsFile = line;
+		this->clientsFile = clientsFile;
 		clients = readClients(clientsFile,packets);
 		file.close();
 	}
@@ -183,9 +189,21 @@ Agency::Agency(string fileName){
 		cout << "Could not open agency file";
 	}
 }
+
 // ----------------------------------------------------------------------------------------
 //                                           Gets                                          
 // ----------------------------------------------------------------------------------------
+
+string Agency::getClientsFile() const
+{
+	return clientsFile;
+}
+
+string Agency::getPacketsFile() const
+{
+	return packetsFile;
+}
+
 string Agency::getName() const{
 	return name;
 }

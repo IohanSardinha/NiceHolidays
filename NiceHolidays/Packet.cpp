@@ -23,6 +23,12 @@ Packet::Packet(vector<string> s, Date b, Date e, double p, unsigned m){
 string Packet::getId() const {
 	return id;
 }
+
+unsigned long Packet::getNumPackets() const
+{
+	return numPackets;
+}
+
 vector<string> Packet::getSites() const {
 	return sites;
 }
@@ -48,6 +54,13 @@ bool Packet::setId(string i) {
 	id = i;
 	return true;
 }
+
+bool Packet::setNumPacket(unsigned long n)
+{
+	numPackets = n;
+	return true;
+}
+
 bool Packet::setSites(vector<string> s) {
 	sites = s;
 	return true;
@@ -100,8 +113,8 @@ ofstream& operator<<(ofstream& out, const Packet& packet) {
 	out << packet.getBeginDate() << '\n';
 	out << packet.getEndDate() << '\n';
 	out << packet.getPricePerPerson() << '\n';
-	out << packet.getSoldPlaces() + packet.getMaxPlaces() << '\n';
 	out << packet.getMaxPlaces() << endl;
+	out << packet.getSoldPlaces()<< '\n';
 	return out;
 }
 // ----------------------------------------------------------------------------------------

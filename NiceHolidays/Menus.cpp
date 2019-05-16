@@ -1,7 +1,27 @@
 #pragma once
 #include "Menus.h"
 #include "defs.h"
+#include "Agency.cpp"
 
+inline Table clientsToTable(vector<Client> cs)
+{
+	vector<string> header = { "Name","VAT","Family size","Address","Packets","Total purchased" };
+	vector<vector<string>> clients;
+	for (Client c : cs)
+	{
+		string packets = "";
+		bool first = true;
+		for (auto x : c.getPacketList()) {
+			if (first)
+				first = false;
+			else
+				packets += ", ";
+			packets += x.getId();
+		}
+		clients.push_back(vector<string>({ c.getName(),to_string(c.getVATnumber()),to_string(c.getFamilySize()),str(c.getAddress()),packets,to_string(c.getTotalPurchased()) }));
+	}
+	return Table(header, clients);
+}
 
 // ----------------------------------------------------------------------------------------
 //                                       Main
@@ -9,6 +29,7 @@
 unsigned mainMenu(Agency agency){
 
 	clear();
+	
 	Table table({ "Key", "Action" }, { { "C", "Manage clients" },{ "P", "Manage packets" },{ "I", "View info" },{ "E", "Exit" } });
 	cout << table << endl;
 	cout << "Choose an action:";
@@ -38,7 +59,7 @@ unsigned mainMenu(Agency agency){
 	}
 	else if (input == "e")
 	{
-		exit();
+		exit(agency);
 	}
 
   return 0;
@@ -87,8 +108,31 @@ unsigned viewInfo(Agency agency)
 	return 0;
 }
 
-unsigned exit()
+unsigned exit(Agency agency)
 {
+	ofstream clientsFile(agency.getClientsFile(), ofstream::out, ofstream::trunc), packetsFile(agency.getPacketsFile(), ofstream::out, ofstream::trunc);
+	packetsFile << Packet().getNumPackets() << endl;
+	for (size_t i = 0; i < agency.getPackets().size(); i++)
+	{
+		packetsFile << agency.getPackets().at(i);
+
+		if(i != agency.getPackets().size()-1)
+		{
+			packetsFile << SEPARATOR << endl;
+		}
+	}
+	for (size_t i = 0; i < agency.getClients().size(); i++)
+	{
+		clientsFile << agency.getClients().at(i);
+
+		if (i != agency.getClients().size() - 1)
+		{
+			clientsFile << endl << SEPARATOR << endl;
+		}
+	}
+	clientsFile.close();
+	packetsFile.close();
+
 	clear();
 	Table table({ "Thank you!" }, { { "Untill next time" } });
 	cout << table;
@@ -127,7 +171,7 @@ unsigned manageClients(Agency agency)
 	}
 	else if (input == "n")
 	{
-
+		newClient(agency);
 	}
 	else if (input == "d")
 	{
@@ -148,22 +192,7 @@ unsigned manageClients(Agency agency)
 unsigned viewClients(Agency agency, unsigned origin)
 {
 	clear();
-	vector<string> header = { "Name","VAT","Family size","Address","Packets","Total purchased" };
-	vector<vector<string>> clients;
-	for (Client c : agency.getClients())
-	{
-		string packets = "";
-		bool first = true;
-		for (auto x : c.getPacketList()) {
-			if (first)
-				first = false;
-			else
-				packets += ", ";
-			packets += x.getId();
-		}
-		clients.push_back(vector<string>({ c.getName(),to_string(c.getVATnumber()),to_string(c.getFamilySize()),str(c.getAddress()),packets,to_string(c.getTotalPurchased()) }));
-	}
-	cout << Table(header, clients) << endl;
+	cout << clientsToTable(agency.getClients()) << endl;
 	pause();
 
 	if (origin == 0)
@@ -176,7 +205,98 @@ unsigned viewClients(Agency agency, unsigned origin)
 
 unsigned newClient(Agency agency)
 {
+	string input;
+	Client newClient = Client();
+
+	//NAME
 	clear();
+	cout << clientsToTable({ newClient }) << endl;
+	cout << "Client name:";
+	getline(cin, input);
+	newClient.setName(input);
+
+	//VAT
+	clear();
+	cout << clientsToTable({ newClient }) << endl;
+	cout << "Client VAT number:";
+	getline(cin, input);
+	while (true)
+	{
+		try
+		{
+			newClient.setVATnumber(stoi(input));
+			break;
+		}
+		catch (exception)
+		{
+			cout << input << " is not a valid input. Insert a valid integer:";
+			getline(cin, input);
+		}
+	}
+
+	//FAMILY SIZE
+	clear();
+	cout << clientsToTable({ newClient }) << endl;
+	cout << "Client family size:";
+	getline(cin, input);
+	while (true)
+	{
+		try
+		{
+			newClient.setFamilySize(stoi(input));
+			break;
+		}
+		catch (exception)
+		{
+			cout << input << " is not a valid input. Insert a valid integer:";
+			getline(cin, input);
+		}
+	}
+
+	//ADDRESS
+	clear();
+	cout << clientsToTable({ newClient }) << endl;
+	cout << "Client address(separetad by '/'):";
+	getline(cin, input);
+	newClient.setAddress(split(input,"/"));
+
+	//PACKETS
+	clear();
+	cout << clientsToTable({ newClient }) << endl;
+	cout << "Client packets(separated by ';':";
+	getline(cin, input);
+	vector<Packet> packets;
+	vector<string> packsIds = split(input, ";");
+	if (!(packsIds.size() == 1 && packsIds.at(0).empty()))
+	{
+		for (size_t i = 0; i < packsIds.size(); i++)
+		{
+			packets.push_back(getPacketById(agency.getPackets(), stoi(packsIds.at(i))));
+		}
+	}
+	newClient.setPacketList(packets);
+
+	//PACKETS
+	clear();
+	cout << clientsToTable({ newClient }) << endl;
+	cout << "Client total purchased:";
+	getline(cin, input);
+	while (true)
+	{
+		try
+		{
+			newClient.setTotalPurchased(stoi(input));
+			break;
+		}
+		catch (exception)
+		{
+			cout << input << " is not a valid input. Insert a valid integer:";
+			getline(cin, input);
+		}
+	}
+
+	manageClients(agency);
+
 	return 0;
 }
 
@@ -286,6 +406,8 @@ unsigned viewPackets(Agency agency, unsigned origin)
 unsigned newPacket(Agency agency)
 {
 	clear();
+	Client client = Client();
+
 	return 0;
 }
 

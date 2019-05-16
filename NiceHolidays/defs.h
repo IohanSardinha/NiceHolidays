@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <iostream>
-#include "Packet.h"
 #if defined(_WIN32)
     #define PLATFORM_NAME "windows" // Windows
 #elif defined(_WIN64)
@@ -31,6 +30,11 @@ inline bool clear(){
 //Splits a string by a specific delimiter and puts it into a vector
 inline vector<string> split(string str, string delimiter)
 {
+	
+	if(str.empty() || str.find(delimiter) == str.npos)
+	{
+		return { str };
+	}
 	vector<string> result;
 	size_t pos = 0;
 	string token;
@@ -67,5 +71,5 @@ inline string lower(string s)
 inline void pause()
 {
 	cout << "Press enter to continue...";
-	cin.get();
+	getline(cin, string());
 }
