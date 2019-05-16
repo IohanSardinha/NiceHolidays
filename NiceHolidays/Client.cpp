@@ -83,17 +83,15 @@ ofstream& operator<<(ofstream& out, const Client& client) {
 	out << client.getFamilySize() << '\n';
 	out << client.getAddress() << '\n';
 	bool first = true;
-	double packetsValue = 0;
 	for (auto x : client.getPacketList()){
 		if (first)
 			first = false;
 		else
 			out << " ; ";
-		out << x.getId();
-		packetsValue += x.getPricePerPerson() * client.getFamilySize();
+		out << to_string(abs(stoi(x.getId())));
 	}
 	out << '\n';
-	out << packetsValue;
+	out << client.getTotalPurchased();
 	return out;
 }
 // ----------------------------------------------------------------------------------------
@@ -112,7 +110,7 @@ string str(Client client) {
 			first = false;
 		else
 			res << ", ";
-		res << x.getId();
+		res << to_string(abs(stoi(x.getId())));
 	}
 	return res.str();
 }

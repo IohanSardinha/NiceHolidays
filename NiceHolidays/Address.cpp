@@ -87,10 +87,10 @@ ostream& operator<<(ostream& out, const Address& address) {
 	return out;
 }
 ofstream& operator<<(ofstream& out, const Address& address) {
-	out << address.getStreet();
-	out << address.getDoorNumber() << " / ";
-	out << address.getFloor() << " / ";
-	out << address.getPostalCode() << " / ";
+	out << address.getStreet() << "/";
+	out << address.getDoorNumber() << "/";
+	out << address.getFloor() << "/";
+	out << address.getPostalCode() << "/";
 	out << address.getLocation();
 	return out;
 }

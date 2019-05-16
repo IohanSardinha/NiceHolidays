@@ -5,7 +5,7 @@
 #include "Agency.h"
 #include "Table.cpp"
 inline unsigned mainMenu(Agency);
-inline unsigned exit();
+inline unsigned exit(Agency);
 inline unsigned manageClients(Agency);
 inline unsigned managePackets(Agency);
 inline unsigned viewInfo(Agency);

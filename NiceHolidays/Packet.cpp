@@ -31,6 +31,12 @@ Packet::Packet(vector<string> s, Date b, Date e, double p, unsigned m){
 string Packet::getId() const {
 	return id;
 }
+
+unsigned long Packet::getNumPackets() const
+{
+	return numPackets;
+}
+
 vector<string> Packet::getSites() const {
 	return sites;
 }
@@ -56,6 +62,13 @@ bool Packet::setId(string i) {
 	id = i;
 	return true;
 }
+
+bool Packet::setNumPacket(unsigned long n)
+{
+	numPackets = n;
+	return true;
+}
+
 bool Packet::setSites(vector<string> s) {
 	sites = s;
 	return true;
@@ -90,7 +103,7 @@ ostream& operator<<(ostream& out, const Packet& packet) {
 	out << str(packet);
 	return out;
 }
-ofstream& operator<<(ofstream& out, const Packet& packet) {
+std::ofstream& operator<<(std::ofstream& out, const Packet& packet) {
 	out << packet.getId() << '\n';
 	out << packet.getSites().at(0);
 	if (packet.getSites().size() > 1){
@@ -104,12 +117,12 @@ ofstream& operator<<(ofstream& out, const Packet& packet) {
 			out << packet.getSites().at(i);
 		}
 	}
-	out << '\n';
+	out << endl;
 	out << packet.getBeginDate() << '\n';
 	out << packet.getEndDate() << '\n';
-	out << packet.getPricePerPerson() << '\n';
-	out << packet.getSoldPlaces() + packet.getMaxPlaces() << '\n';
+	out << packet.getPricePerPerson() << endl;
 	out << packet.getMaxPlaces() << endl;
+	out << packet.getSoldPlaces()<< '\n';
 	return out;
 }
 // ----------------------------------------------------------------------------------------

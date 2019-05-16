@@ -1,12 +1,10 @@
 #pragma once
-#include <fstream>
+#include <string>
+#include <vector>
+#include "Date.cpp"
 #include <iostream>
 #include <iomanip>
 #include <sstream>
-#include <string>
-#include <vector>
-#include "defs.h"
-#include "Date.cpp"
 using namespace std;
 class Packet{
 	private:
@@ -23,10 +21,12 @@ class Packet{
 		inline Packet(bool);
 		inline Packet(vector<string>, Date, Date, double, unsigned);		// 
 		inline string getId() const;										// 
+		inline unsigned long getNumPackets() const;
 		inline vector<string> getSites() const;							// 
 		inline Date getBeginDate() const;									// 
 		inline Date getEndDate() const;									// 
 		inline double getPricePerPerson() const;							// 
+		inline bool setNumPacket(unsigned long);
 		inline unsigned getSoldPlaces() const;								// 
 		inline unsigned getMaxPlaces() const;								// 
 		inline bool setId(string);  										// to set negatve if "deprecated"

@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <iostream>
-#include "Packet.h"
 #if defined(_WIN32)
     #define PLATFORM_NAME "windows" // Windows
 #elif defined(_WIN64)
@@ -31,6 +30,11 @@ inline bool clear(){
 //Splits a string by a specific delimiter and puts it into a vector
 inline vector<string> split(string str, string delimiter)
 {
+	
+	if(str.empty() || str.find(delimiter) == str.npos)
+	{
+		return { str };
+	}
 	vector<string> result;
 	size_t pos = 0;
 	string token;
@@ -67,29 +71,33 @@ inline string lower(string s)
 inline void pause()
 {
 	cout << "Press enter to continue...";
-	cin.get();
+	getline(cin, string());
 }
-string lstrip(string s){
+
+inline string lstrip(string s){
 	int i = 0;
 	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	'){
 		i++;
 	}
 	return s.substr(i);
 }
-string rstrip(string s){
+
+inline string rstrip(string s){
 	int i = s.length() - 1;
 	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	'){
 		i--;
 	}
 	return s.substr(0, i + 1);
 }
-string strip(string s){
+
+inline string strip(string s){
 	string result = lstrip(s);
 	result = rstrip(result);
 	return result;
 }
-vector<string> strip(vector<string> s){
-	for (int i = 0; i < s.size(); ++i){
+
+inline vector<string> strip(vector<string> s){
+	for (size_t i = 0; i < s.size(); ++i){
 		s.at(i) = strip(s.at(i));
 	}
 	return s;
