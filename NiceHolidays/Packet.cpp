@@ -3,6 +3,10 @@
 // ----------------------------------------------------------------------------------------
 //                                       Constructors
 // ----------------------------------------------------------------------------------------
+Packet::Packet() 
+{
+}
+
 Packet::Packet(vector<string> s, Date b, Date e, double p, unsigned m){
 	numPackets++;
 	id = to_string(numPackets);
@@ -60,6 +64,13 @@ bool Packet::setPricePerPerson(double p) {
 	pricePerPerson = p;
 	return true;
 }
+
+bool Packet::setSoldPlaces(unsigned s)
+{
+	soldPlaces = s;
+	return true;
+}
+
 bool Packet::setMaxPlaces(unsigned m) {
 	maxPlaces = m;
 	return true;
@@ -90,7 +101,7 @@ ofstream& operator<<(ofstream& out, const Packet& packet) {
 	out << packet.getEndDate() << '\n';
 	out << packet.getPricePerPerson() << '\n';
 	out << packet.getSoldPlaces() + packet.getMaxPlaces() << '\n';
-	out << packet.getMaxPlaces();
+	out << packet.getMaxPlaces() << endl;
 	return out;
 }
 // ----------------------------------------------------------------------------------------

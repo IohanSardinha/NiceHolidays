@@ -19,6 +19,7 @@ class Packet{
 		unsigned soldPlaces; 										// number of sold places
 		unsigned maxPlaces; 										// number of places still available in the packet (updated whenever the packet is sold to a new client)
 	public:
+		inline Packet();
 		inline Packet(vector<string>, Date, Date, double, unsigned);		// 
 		inline string getId() const;										// 
 		inline vector<string> getSites() const;							// 
@@ -32,7 +33,8 @@ class Packet{
 		inline bool setBeginDate(Date);									// 
 		inline bool setEndDate(Date);										// 
 		inline bool setPricePerPerson(double);								// 
-		inline bool setMaxPlaces(unsigned);								// 
+		inline bool setMaxPlaces(unsigned);	
+		inline bool setSoldPlaces(unsigned);
 		inline friend ostream& operator<<(ostream&, const Packet&);		// 
 		inline friend ofstream& operator<<(ofstream&, const Packet&);		// 
 };
