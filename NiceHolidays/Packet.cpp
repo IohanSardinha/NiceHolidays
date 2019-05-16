@@ -3,10 +3,18 @@
 // ----------------------------------------------------------------------------------------
 //                                       Constructors
 // ----------------------------------------------------------------------------------------
-Packet::Packet() 
-{
+Packet::Packet(){}
+Packet::Packet(bool id){
+	if (id){
+		this -> id = to_string(0);
+	}else{
+		numPackets++;
+		this -> id = to_string(numPackets);
+	}
+	pricePerPerson = 0;
+	soldPlaces = 0;
+	maxPlaces = 0;
 }
-
 Packet::Packet(vector<string> s, Date b, Date e, double p, unsigned m){
 	numPackets++;
 	id = to_string(numPackets);

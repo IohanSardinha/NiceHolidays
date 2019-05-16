@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include "Agency.h"
 #include "Table.cpp"
 inline unsigned mainMenu(Agency);

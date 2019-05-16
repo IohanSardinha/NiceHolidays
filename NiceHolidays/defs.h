@@ -69,3 +69,28 @@ inline void pause()
 	cout << "Press enter to continue...";
 	cin.get();
 }
+string lstrip(string s){
+	int i = 0;
+	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	'){
+		i++;
+	}
+	return s.substr(i);
+}
+string rstrip(string s){
+	int i = s.length() - 1;
+	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	'){
+		i--;
+	}
+	return s.substr(0, i + 1);
+}
+string strip(string s){
+	string result = lstrip(s);
+	result = rstrip(result);
+	return result;
+}
+vector<string> strip(vector<string> s){
+	for (int i = 0; i < s.size(); ++i){
+		s.at(i) = strip(s.at(i));
+	}
+	return s;
+}

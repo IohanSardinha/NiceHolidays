@@ -8,7 +8,7 @@
 Address::Address() {
 	street = "Unnamed Street";
 	doorNumber = 0;
-	floor = "-";
+	floor = "";
 	postalCode = "0000-000";
 	location = "Unnamed Location";
 }
@@ -17,7 +17,10 @@ Address::Address(vector<string> aux)
 {
 	street = aux.at(0);
 	doorNumber = stoi(aux.at(1));
-	floor = aux.at(2);
+	if (strip(aux.at(2)) == "-")
+		floor = "";
+	else
+		floor = aux.at(2);
 	postalCode = aux.at(3);
 	location = aux.at(4);
 }
@@ -25,7 +28,10 @@ Address::Address(vector<string> aux)
 Address::Address(string s, unsigned short n, string f, string c, string l) {
 	street = s;
 	doorNumber = n;
-	floor = f;
+	if (f == "-")
+		floor = "";
+	else
+		floor = f;
 	postalCode = c;
 	location = l;
 }
@@ -59,7 +65,10 @@ bool Address::setDoorNumber(unsigned short doorNumber) {
 	return true;
 }
 bool Address::setFloor(string floor) {
-	this -> floor = floor;
+	if (floor == "-")
+		this -> floor = "";
+	else
+		this -> floor = floor;
 	return true;
 }
 bool Address::setPostalCode(string postalCode) {
@@ -79,7 +88,6 @@ ostream& operator<<(ostream& out, const Address& address) {
 }
 ofstream& operator<<(ofstream& out, const Address& address) {
 	out << address.getStreet();
-
 	out << address.getDoorNumber() << " / ";
 	out << address.getFloor() << " / ";
 	out << address.getPostalCode() << " / ";
@@ -91,7 +99,7 @@ string str(Address address) {
 	res << address.getStreet() << ", ";
 	res << address.getDoorNumber();
 	if (address.getFloor() != "-"){
-		res << " " << address.getFloor();
+		res << "" << address.getFloor();
 	}
 	res << ", ";
 	res << address.getLocation() << ", ";

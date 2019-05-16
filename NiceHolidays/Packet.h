@@ -20,6 +20,7 @@ class Packet{
 		unsigned maxPlaces; 										// number of places still available in the packet (updated whenever the packet is sold to a new client)
 	public:
 		inline Packet();
+		inline Packet(bool);
 		inline Packet(vector<string>, Date, Date, double, unsigned);		// 
 		inline string getId() const;										// 
 		inline vector<string> getSites() const;							// 
