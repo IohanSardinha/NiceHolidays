@@ -45,3 +45,27 @@ inline vector<string> split(string str, string delimiter)
 	result.push_back(str);
 	return result;
 }
+
+inline string lower(string s)
+{
+	string ns;
+	for (size_t i = 0; i < s.size(); i++)
+	{
+		if (s.at(i) >= 'A' && s.at(i) <= 'Z')
+		{
+			ns += s.at(i) + 32;
+		}
+		else
+		{
+			ns += s.at(i);
+		}
+	}
+
+	return ns;
+}
+
+inline void pause()
+{
+	cout << "Press enter to continue...";
+	cin.get();
+}
