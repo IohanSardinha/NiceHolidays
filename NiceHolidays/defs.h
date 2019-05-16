@@ -70,34 +70,32 @@ inline string lower(string s)
 
 inline void pause()
 {
+	string s;
 	cout << "Press enter to continue...";
-	getline(cin, string());
+	getline(cin, s);
 }
 
-inline string lstrip(string s){
+inline string lstrip(string s) {
 	int i = 0;
-	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	'){
+	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	') {
 		i++;
 	}
 	return s.substr(i);
 }
-
-inline string rstrip(string s){
+inline string rstrip(string s) {
 	int i = s.length() - 1;
-	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	'){
+	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	') {
 		i--;
 	}
 	return s.substr(0, i + 1);
 }
-
-inline string strip(string s){
+inline string strip(string s) {
 	string result = lstrip(s);
 	result = rstrip(result);
 	return result;
 }
-
-inline vector<string> strip(vector<string> s){
-	for (size_t i = 0; i < s.size(); ++i){
+inline vector<string> strip(vector<string> s) {
+	for (unsigned i = 0; i < s.size(); ++i) {
 		s.at(i) = strip(s.at(i));
 	}
 	return s;

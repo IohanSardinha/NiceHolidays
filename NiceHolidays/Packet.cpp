@@ -3,18 +3,23 @@
 // ----------------------------------------------------------------------------------------
 //                                       Constructors
 // ----------------------------------------------------------------------------------------
-Packet::Packet(){}
-Packet::Packet(bool id){
-	if (id){
-		this -> id = to_string(0);
-	}else{
+Packet::Packet() 
+{
+}
+
+Packet::Packet(bool id,int nothing) 
+{
+	if (id) {
+		this->id = "0";
+	} else {
 		numPackets++;
-		this -> id = to_string(numPackets);
+		this->id = to_string(numPackets);
 	}
 	pricePerPerson = 0;
 	soldPlaces = 0;
 	maxPlaces = 0;
 }
+
 Packet::Packet(vector<string> s, Date b, Date e, double p, unsigned m){
 	numPackets++;
 	id = to_string(numPackets);
@@ -103,7 +108,7 @@ ostream& operator<<(ostream& out, const Packet& packet) {
 	out << str(packet);
 	return out;
 }
-std::ofstream& operator<<(std::ofstream& out, const Packet& packet) {
+ofstream& operator<<(ofstream& out, const Packet& packet) {
 	out << packet.getId() << '\n';
 	out << packet.getSites().at(0);
 	if (packet.getSites().size() > 1){
@@ -117,10 +122,10 @@ std::ofstream& operator<<(std::ofstream& out, const Packet& packet) {
 			out << packet.getSites().at(i);
 		}
 	}
-	out << endl;
+	out << '\n';
 	out << packet.getBeginDate() << '\n';
 	out << packet.getEndDate() << '\n';
-	out << packet.getPricePerPerson() << endl;
+	out << packet.getPricePerPerson() << '\n';
 	out << packet.getMaxPlaces() << endl;
 	out << packet.getSoldPlaces()<< '\n';
 	return out;

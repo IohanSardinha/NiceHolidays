@@ -1,10 +1,12 @@
 #pragma once
-#include <string>
-#include <vector>
-#include "Date.cpp"
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <string>
+#include <vector>
+#include "defs.h"
+#include "Date.cpp"
 using namespace std;
 class Packet{
 	private:
@@ -18,7 +20,7 @@ class Packet{
 		unsigned maxPlaces; 										// number of places still available in the packet (updated whenever the packet is sold to a new client)
 	public:
 		inline Packet();
-		inline Packet(bool);
+		inline Packet(bool id,int nothing);
 		inline Packet(vector<string>, Date, Date, double, unsigned);		// 
 		inline string getId() const;										// 
 		inline unsigned long getNumPackets() const;

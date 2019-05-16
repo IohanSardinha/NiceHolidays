@@ -130,7 +130,7 @@ inline vector<Client> readClients(string clients_file, vector<Packet> packets)
 				current.setFamilySize(stoi(line));
 				break;
 			case 3:
-				current.setAddress(strip(split(line,"/")));
+				current.setAddress(strip(split(line, "/")));
 				break;
 			case 4:
 				packsIds = split(line, ";");

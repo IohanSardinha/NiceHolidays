@@ -66,9 +66,9 @@ bool Address::setDoorNumber(unsigned short doorNumber) {
 }
 bool Address::setFloor(string floor) {
 	if (floor == "-")
-		this -> floor = "";
+		this->floor = "";
 	else
-		this -> floor = floor;
+		this->floor = floor;
 	return true;
 }
 bool Address::setPostalCode(string postalCode) {
@@ -89,7 +89,10 @@ ostream& operator<<(ostream& out, const Address& address) {
 ofstream& operator<<(ofstream& out, const Address& address) {
 	out << address.getStreet() << "/";
 	out << address.getDoorNumber() << "/";
-	out << address.getFloor() << "/";
+	if(address.getFloor().empty())
+		out << "-/";
+	else
+		out << address.getFloor() << "/";
 	out << address.getPostalCode() << "/";
 	out << address.getLocation();
 	return out;
@@ -99,7 +102,7 @@ string str(Address address) {
 	res << address.getStreet() << ", ";
 	res << address.getDoorNumber();
 	if (address.getFloor() != "-"){
-		res << "" << address.getFloor();
+		res << address.getFloor();
 	}
 	res << ", ";
 	res << address.getLocation() << ", ";

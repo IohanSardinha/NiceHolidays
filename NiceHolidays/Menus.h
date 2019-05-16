@@ -4,6 +4,7 @@
 #include <sstream>
 #include "Agency.h"
 #include "Table.cpp"
+#include "Agency.cpp"
 inline unsigned mainMenu(Agency);
 inline unsigned exit(Agency);
 inline unsigned manageClients(Agency);
