@@ -1,5 +1,5 @@
-#include "Agency.cpp"
-#include "Menus.cpp"
+#include "Agency.h"
+#include "Menus.h"
 using namespace std;
 unsigned long Packet::numPackets = 0;
 

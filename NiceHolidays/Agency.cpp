@@ -3,19 +3,7 @@
 #include "Agency.h"
 
 
-inline Packet getPacketById(vector<Packet> pckts, unsigned id)
-{
-	for (Packet pckt : pckts)
-	{
-		if (abs(stoi(pckt.getId())) == id)
-		{
-			return pckt;
-		}
-	}
-    return Packet();
-}
-
-inline vector<Packet> readPackets(string packets_file)
+ vector<Packet> readPackets(string packets_file)
 {
 	string line;
 	ifstream file(packets_file);
@@ -43,11 +31,11 @@ inline vector<Packet> readPackets(string packets_file)
 				break;
 
 			case 1:
-				splittedLine = split(line, "-");
+				splittedLine = strip(split(line, "-"));
 				if (splittedLine.size() > 1)
 				{
 					vector<string> v = { splittedLine.at(0) };
-					vector<string> v2 = split(splittedLine.at(1), ",");
+					vector<string> v2 = strip(split(splittedLine.at(1), ","));
 					for (string s : v2)
 					{
 						v.push_back(s);
@@ -97,7 +85,7 @@ inline vector<Packet> readPackets(string packets_file)
 	return travel_packs;
 }
 
-inline vector<Client> readClients(string clients_file, vector<Packet> packets)
+ vector<Client> readClients(string clients_file, vector<Packet> packets)
 {
 	string line;
 	ifstream file(clients_file);
@@ -207,21 +195,27 @@ string Agency::getPacketsFile() const
 string Agency::getName() const{
 	return name;
 }
+
 unsigned Agency::getVATnumber() const{
 	return VATnumber;
 }
+
 Address Agency::getAddress() const{
 	return address;
 }
+
 string Agency::getURL() const{
 	return URL;
 }
+
 vector<Client> Agency::getClients() const{
 	return clients;
 }
+
 vector<Packet> Agency::getPackets() const{
 	return packets;
 }
+
 // ----------------------------------------------------------------------------------------
 //                                           Sets                                          
 // ----------------------------------------------------------------------------------------
@@ -229,25 +223,42 @@ bool Agency::setName(string name){
 	this->name = name;
 	return true;
 }
+
 bool Agency::setVATnumber(unsigned VATnumber){
 	this->VATnumber = VATnumber;
 	return true;
 }
+
 bool Agency::setAddress(Address address){
 	this -> address = address;
 	return true;
 }
+
 bool Agency::setURL(string url){
 	this -> URL = url;
 	return true;
 }
+
 bool Agency::setClients(vector<Client> & clients){
 	this -> clients = clients;
 	return true;
 }
+
 bool Agency::setPackets(vector<Packet> & packets){
   	this -> packets = packets;
   	return true;
+}
+
+bool Agency::addClient(Client client)
+{
+	clients.push_back(client);
+	return true;
+}
+
+bool Agency::addPacket(Packet packet)
+{
+	packets.push_back(packet);
+	return true;
 }
 
 // ----------------------------------------------------------------------------------------

@@ -193,13 +193,13 @@ Date date(unsigned days) {
 //                                    Auxiliary Functions
 // ----------------------------------------------------------------------------------------
 string str(Date date) {
-	string zero = "0";
+	const char zero = '0';
 	string aux = to_string(date.getDay());
-	string d = zero * (2 - aux.size()) + aux;
+	string d = string((2 - aux.size()),zero) + aux;
 	aux = to_string(date.getMonth());
-	string m = zero * (2 - aux.size()) + aux;
+	string m = string((2 - aux.size()),zero) + aux;
 	aux = to_string(date.getYear());
-	string y = zero * (4 - aux.size()) + aux;
+	string y = string((4 - aux.size()),zero) + aux;
 	return y + "/" + m + "/" + d;
 }
 bool bissextile(unsigned year) {

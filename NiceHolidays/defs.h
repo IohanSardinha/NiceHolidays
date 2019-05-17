@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <iostream>
 #if defined(_WIN32)
     #define PLATFORM_NAME "windows" // Windows
@@ -12,91 +13,15 @@
 #else
 	#define PLATFORM_NAME "other"
 #endif
-using namespace std;
 const std::string AGENCY_FILE_NAME = "agency.txt";
 const std::string SEPARATOR = "::::::::::";
 const unsigned char TABLE_PADDING = 4;
-inline bool clear(){
-	if (PLATFORM_NAME == "linux"){
-		cout << "\033[2J\033[1;1H";
-	}else if (PLATFORM_NAME == "windows"){
-		system("cls");
-	}else{
-		return false;
-	}
-	return true;
-}
 
-//Splits a string by a specific delimiter and puts it into a vector
-inline vector<string> split(string str, string delimiter)
-{
-	
-	if(str.empty() || str.find(delimiter) == str.npos)
-	{
-		return { str };
-	}
-	vector<string> result;
-	size_t pos = 0;
-	string token;
-	pos = str.find(delimiter);
-	while (pos != str.npos)
-	{
-		token = str.substr(0, pos);
-		result.push_back(token);
-		str.erase(0, pos + delimiter.length());
-		pos = str.find(delimiter);
-	}
-	result.push_back(str);
-	return result;
-}
-
-inline string lower(string s)
-{
-	string ns;
-	for (size_t i = 0; i < s.size(); i++)
-	{
-		if (s.at(i) >= 'A' && s.at(i) <= 'Z')
-		{
-			ns += s.at(i) + 32;
-		}
-		else
-		{
-			ns += s.at(i);
-		}
-	}
-
-	return ns;
-}
-
-inline void pause()
-{
-	string s;
-	cout << "Press enter to continue...";
-	getline(cin, s);
-}
-
-inline string lstrip(string s) {
-	int i = 0;
-	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	') {
-		i++;
-	}
-	return s.substr(i);
-}
-inline string rstrip(string s) {
-	int i = s.length() - 1;
-	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	') {
-		i--;
-	}
-	return s.substr(0, i + 1);
-}
-inline string strip(string s) {
-	string result = lstrip(s);
-	result = rstrip(result);
-	return result;
-}
-inline vector<string> strip(vector<string> s) {
-	for (unsigned i = 0; i < s.size(); ++i) {
-		s.at(i) = strip(s.at(i));
-	}
-	return s;
-}
+bool clear();
+std::vector<std::string> split(std::string str, std::string delimiter);
+std::string lower(std::string s);
+void pause();
+std::string lstrip(std::string s);
+std::string rstrip(std::string s);
+std::string strip(std::string s);
+std::vector<std::string> strip(std::vector<std::string> s);

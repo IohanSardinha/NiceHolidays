@@ -2,7 +2,8 @@
 #include "Menus.h"
 #include "defs.h"
 
-inline Table clientsToTable(vector<Client> cs)
+
+ Table clientsToTable(vector<Client> cs)
 {
 	vector<string> header = { "Name","VAT","Family size","Address","Packets","Total purchased" };
 	vector<vector<string>> clients;
@@ -20,6 +21,36 @@ inline Table clientsToTable(vector<Client> cs)
 		clients.push_back(vector<string>({ c.getName(),to_string(c.getVATnumber()),to_string(c.getFamilySize()),str(c.getAddress()),packets,to_string(c.getTotalPurchased()) }));
 	}
 	return Table(header, clients);
+}
+
+ Table packetsToTable(vector<Packet> pckts)
+{
+	vector<string> header = { "ID","Sites","Start date","End date","Price per person","Sold places","Max places" };
+	vector<vector<string>> packets;
+	for (Packet p : pckts)
+	{
+		string sites;
+		if (p.getSites().size() > 1)
+		{
+			sites = p.getSites().at(0) + " - ";
+			for (size_t i = 1; i < p.getSites().size(); i++)
+			{
+				sites += p.getSites().at(i);
+				if (i != p.getSites().size() - 1)
+				{
+					sites += ", ";
+				}
+			}
+		}
+		else
+		{
+			sites = p.getSites().at(0);
+		}
+		ostringstream price;
+		price << fixed << setprecision(2) << p.getPricePerPerson();
+		packets.push_back(vector<string>({ p.getId(),sites,str(p.getBeginDate()),str(p.getEndDate()),price.str(),to_string(p.getSoldPlaces()),to_string(p.getMaxPlaces()) }));
+	}
+	return Table(header, packets);
 }
 
 // ----------------------------------------------------------------------------------------
@@ -174,7 +205,7 @@ unsigned manageClients(Agency agency)
 	}
 	else if (input == "d")
 	{
-		
+		deleteClient(agency);
 	}
 	else if (input == "b")
 	{
@@ -255,7 +286,7 @@ unsigned newClient(Agency agency)
 	//ADDRESS
 	clear();
 	cout << clientsToTable({ newClient }) << endl;
-	cout << "Client address(separetad by '/'):";
+	cout << "Client address(Street / floor / door / Postal-Code / Location):";
 	getline(cin, input);
 	newClient.setAddress(split(input,"/"));
 
@@ -294,7 +325,11 @@ unsigned newClient(Agency agency)
 		}
 	}
 
-	//agency.setClients(agency.getClients().push_back(newClient));
+	clear();
+	cout << clientsToTable({ newClient }) << endl;
+	pause();
+
+	agency.addClient(newClient);
 
 	manageClients(agency);
 
@@ -309,7 +344,50 @@ unsigned editClients(Agency agency)
 
 unsigned deleteClient(Agency agency)
 {
-	clear();
+	string input;
+	cout << "Clients VAT number(0 to exit):";
+	getline(cin, input);
+	int vat;
+	while (true)
+	{
+		try
+		{
+			vat = stoi(input);
+			break;
+		}
+		catch (exception)
+		{
+			cout << "'" << input << "' is not a valid VAT number. Insert a valid integer (0 to exit):";
+			getline(cin, input);
+		}
+	}
+
+	if (vat == 0)
+	{
+		manageClients(agency);
+		return 0;
+	}
+	for (unsigned i = 0; i < agency.getClients().size(); i++)
+	{
+		Client c = agency.getClients().at(i);
+		if (vat == c.getVATnumber())
+		{
+			clear();
+			cout << clientsToTable({c}) << endl;
+			cout << "Are you sure you want to delete " << c.getName() << "?(y/n)" << endl;
+			getline(cin, input);
+			if (input == "y")
+			{
+				vector<Client> temp = agency.getClients();
+				temp.erase(temp.begin() + i);
+				agency.setClients(temp);
+			}
+			manageClients(agency);
+			return 0;
+		}
+	}
+	cout << "Client '" << input << "' not found" << endl;
+	deleteClient(agency);
 	return 0;
 }
 
@@ -354,7 +432,7 @@ unsigned managePackets(Agency agency)
 	}
 	else if (input == "d")
 	{
-
+		deletePacket(agency);
 	}
 	else if (input == "p")
 	{
@@ -371,32 +449,7 @@ unsigned managePackets(Agency agency)
 unsigned viewPackets(Agency agency, unsigned origin)
 {
 	clear();
-	vector<string> header = { "ID","Sites","Start date","End date","Price per person","Sold places","Max places" };
-	vector<vector<string>> packets;
-	for (Packet p : agency.getPackets())
-	{
-		string sites;
-		if (p.getSites().size() > 1)
-		{
-			sites = p.getSites().at(0) + " - ";
-			for (size_t i = 1; i < p.getSites().size(); i++)
-			{
-				sites += p.getSites().at(i);
-				if (i != p.getSites().size() - 1)
-				{
-					sites += ", ";
-				}
-			}
-		}
-		else
-		{
-			sites = p.getSites().at(0);
-		}
-		ostringstream price;
-		price << fixed << setprecision(2) << p.getPricePerPerson();
-		packets.push_back(vector<string>({ p.getId(),sites,str(p.getBeginDate()),str(p.getEndDate()),price.str(),to_string(p.getSoldPlaces()),to_string(p.getMaxPlaces()) }));
-	}
-	cout << Table(header, packets) << endl;
+	cout << packetsToTable(agency.getPackets()) << endl;
 	pause();
 
 	if (origin == 0)
@@ -473,6 +526,12 @@ unsigned newPacket(Agency agency) {
 	packet = { p.getId(),sites,str(p.getBeginDate()),str(p.getEndDate()),new_price.str(),to_string(p.getSoldPlaces()),to_string(p.getMaxPlaces()) };
 	clear();
 	cout << Table(header, { packet }) << '\n';
+	pause();
+
+	agency.addPacket(p);
+
+	managePackets(agency);
+
 	return 0;
 }
 
@@ -484,7 +543,51 @@ unsigned editPackets(Agency agency)
 
 unsigned deletePacket(Agency agency)
 {
-	clear();
+	string input;
+	cout << "Packet ID(0 to exit):";
+	getline(cin, input);
+	int vat;
+	while (true)
+	{
+		try
+		{
+			vat = stoi(input);
+			break;
+		}
+		catch (exception)
+		{
+			cout << "'" << input << "' is not a valid ID. Insert a valid integer (0 to exit):";
+			getline(cin, input);
+		}
+	}
+
+	if (vat == 0)
+	{
+		managePackets(agency);
+		return 0;
+	}
+
+	for (unsigned i = 0; i < agency.getPackets().size(); i++)
+	{
+		Packet p = agency.getPackets().at(i);
+		if (vat == abs(stoi(p.getId())))
+		{
+			clear();
+			cout << packetsToTable({ p }) << endl;
+			cout << "Are you sure you want to delete packet " << p.getId() << "?(y/n)" << endl;
+			getline(cin, input);
+			if (input == "y")
+			{
+				vector<Packet> temp = agency.getPackets();
+				temp.erase(temp.begin() + i);
+				agency.setPackets(temp);
+			}
+			managePackets(agency);
+			return 0;
+		}
+	}
+	cout << "Client '" << input << "' not found" << endl;
+	deleteClient(agency);
 	return 0;
 }
 

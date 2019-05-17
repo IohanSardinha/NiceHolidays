@@ -40,24 +40,23 @@ ostream& operator<<(ostream& out, const Table& table) {
 string normalize(string s, unsigned n) {
 	unsigned diff = n - s.length();
 	string result;
-	string space = " ";
+	const char space = ' ';
 	if (diff % 2 == 0){
 		diff /= 2;
-		result += space * diff;
+		result += string(diff,space);
 		result += s;
-		result += space * diff;
+		result += string(diff, space);
 	}else{
 		diff /= 2;
-		result += space * (diff + 1);
+		result += string(diff+1, space);
 		result += s;
-		result += space * diff;
+		result += string(diff, space);
 	}
 	return result;
 }
 string str(Table table) {
-	string padding = " ";
 	string res = "";
-	padding *= TABLE_PADDING;
+	string padding = string(TABLE_PADDING,' ');
 	unsigned rows = table.getContent().size();
 	unsigned cols = table.getContent().at(0).size();
 	vector<unsigned> sizes(cols);
@@ -75,7 +74,7 @@ string str(Table table) {
 	}
 	string line = "+";
 	for (unsigned i = 0; i < sizes.size(); ++i){
-		line += string("-") * (sizes.at(i) + padding.size() * 2) + "+";
+		line += string((sizes.at(i) + padding.size() * 2),'-') + "+";
 	}
 	res += line + '\n';
 	for(unsigned j = 0; j < cols; ++j){

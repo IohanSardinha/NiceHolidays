@@ -3,21 +3,21 @@
 #include <iomanip>
 #include <sstream>
 #include "Agency.h"
-#include "Table.cpp"
-#include "Agency.cpp"
-inline unsigned mainMenu(Agency);
-inline unsigned exit(Agency);
-inline unsigned manageClients(Agency);
-inline unsigned managePackets(Agency);
-inline unsigned viewInfo(Agency);
-inline unsigned viewClients(Agency, unsigned);
-inline unsigned editClients(Agency);
-inline unsigned newClient(Agency);
-inline unsigned deleteClient(Agency);
-inline unsigned buyPacket(Agency);
-inline unsigned viewPackets(Agency, unsigned);
-inline unsigned editPackets(Agency);
-inline unsigned newPacket(Agency);
-inline unsigned deletePacket(Agency);
-inline unsigned packetsSoldToClient(Agency);
-inline unsigned soldPackets(Agency);
+#include "Table.h"
+#include "Agency.h"
+unsigned mainMenu(Agency);
+unsigned exit(Agency);
+unsigned manageClients(Agency);
+unsigned managePackets(Agency);
+unsigned viewInfo(Agency);
+unsigned viewClients(Agency, unsigned);
+unsigned editClients(Agency);
+unsigned newClient(Agency);
+unsigned deleteClient(Agency);
+unsigned buyPacket(Agency);
+unsigned viewPackets(Agency, unsigned);
+unsigned editPackets(Agency);
+unsigned newPacket(Agency);
+unsigned deletePacket(Agency);
+unsigned packetsSoldToClient(Agency);
+unsigned soldPackets(Agency);

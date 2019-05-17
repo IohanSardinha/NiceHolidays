@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include "defs.h"
-#include "Date.cpp"
+#include "Date.h"
 using namespace std;
 class Packet{
 	private:
@@ -19,26 +19,27 @@ class Packet{
 		unsigned soldPlaces; 										// number of sold places
 		unsigned maxPlaces; 										// number of places still available in the packet (updated whenever the packet is sold to a new client)
 	public:
-		inline Packet();
-		inline Packet(bool id,int nothing);
-		inline Packet(vector<string>, Date, Date, double, unsigned);		// 
-		inline string getId() const;										// 
-		inline unsigned long getNumPackets() const;
-		inline vector<string> getSites() const;							// 
-		inline Date getBeginDate() const;									// 
-		inline Date getEndDate() const;									// 
-		inline double getPricePerPerson() const;							// 
-		inline bool setNumPacket(unsigned long);
-		inline unsigned getSoldPlaces() const;								// 
-		inline unsigned getMaxPlaces() const;								// 
-		inline bool setId(string);  										// to set negatve if "deprecated"
-		inline bool setSites(vector<string>);								// 
-		inline bool setBeginDate(Date);									// 
-		inline bool setEndDate(Date);										// 
-		inline bool setPricePerPerson(double);								// 
-		inline bool setMaxPlaces(unsigned);	
-		inline bool setSoldPlaces(unsigned);
-		inline friend ostream& operator<<(ostream&, const Packet&);		// 
-		inline friend ofstream& operator<<(ofstream&, const Packet&);		// 
+		Packet();
+		Packet(bool id,int nothing);
+		Packet(vector<string>, Date, Date, double, unsigned);		// 
+		string getId() const;										// 
+		unsigned long getNumPackets() const;
+		vector<string> getSites() const;							// 
+		Date getBeginDate() const;									// 
+		Date getEndDate() const;									// 
+		double getPricePerPerson() const;							// 
+		bool setNumPacket(unsigned long);
+		unsigned getSoldPlaces() const;								// 
+		unsigned getMaxPlaces() const;								// 
+		bool setId(string);  										// to set negatve if "deprecated"
+		bool setSites(vector<string>);								// 
+		bool setBeginDate(Date);									// 
+		bool setEndDate(Date);										// 
+		bool setPricePerPerson(double);								// 
+		bool setMaxPlaces(unsigned);	
+		bool setSoldPlaces(unsigned);
+		friend ostream& operator<<(ostream&, const Packet&);		// 
+		friend ofstream& operator<<(ofstream&, const Packet&);		// 
 };
-inline string str(Packet packet);											// 
+string str(Packet packet);											// 
+Packet getPacketById(vector<Packet> pckts, unsigned id);
