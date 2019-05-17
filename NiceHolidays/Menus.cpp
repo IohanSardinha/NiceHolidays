@@ -53,6 +53,33 @@
 	return Table(header, packets);
 }
 
+ vector<vector<string>> rankingSites(Agency agency, unsigned max) {
+	 map<string, int> pairs;
+	 map<string, int>::const_iterator mi;
+	 pair<string, int> p;
+	 multimap<int, string> ranking;
+	 for (unsigned i = 0; i < agency.getPackets().size(); ++i) {
+		 for (unsigned j = 0; j < agency.getPackets().at(i).getSites().size(); ++j) {
+			 pairs[agency.getPackets().at(i).getSites().at(j)] += agency.getPackets().at(i).getSoldPlaces();
+		 }
+	 }
+	 for (mi = pairs.begin(); mi != pairs.end(); mi++) {
+		 p = *mi;
+		 ranking.insert(pair<int, string>(-p.second, p.first));
+	 }
+	 vector<vector<string>> content;
+	 clear();
+	 int n = 0;
+	 for (const auto& x : ranking) {
+		 n++;
+		 content.push_back({ to_string(n), x.second, to_string(-x.first) });
+		 if (n == max) {
+			 break;
+		 }
+	 }
+	 return content;
+ }
+
  bool yesOrNo(string question) {
 	 string option;
 	 cout << question << " (y/n) ";
@@ -86,6 +113,27 @@
 	 }
 	 clientsFile.close();
 	 packetsFile.close();
+ }
+
+ bool stringInVector(vector<string> v, string s)
+ {
+	 for (string s2 : v)
+	 {
+		 if (s2 == s)
+			 return true;
+	 }
+	 return false;
+ }
+
+ vector<Packet> getPacketsBySite(vector<Packet> ps, string site)
+ {
+	 vector<Packet> ret;
+	 for (Packet p : ps)
+	 {
+		 if (stringInVector(p.getSites(), site))
+			 ret.push_back(p);
+	 }
+	 return ret;
  }
 
 // ----------------------------------------------------------------------------------------
@@ -192,13 +240,13 @@ unsigned exit(Agency agency)
 unsigned manageClients(Agency agency)
 {
 	clear();
-	Table table({ "Key", "Action" }, { { "V", "View clients" },{ "O","View one specific client" },{ "E", "Edit clients" },{ "N", "New client" },{ "D", "Delete client" } ,{ "B", "Buy packet" },{ "G","Go Back" } });
+	Table table({ "Key", "Action" }, { { "I", "Get sugested sites for clients to visit" }, { "V", "View clients" },{ "O","View one specific client" },{ "E", "Edit clients" },{ "N", "New client" },{ "D", "Delete client" } ,{ "B", "Buy packet" },{ "G","Go Back" } });
 	cout << table << endl;
 	cout << "Choose an action:";
 	string input;
 	getline(cin, input);
 	input = lower(input);
-	while (input != "v" && input != "e" && input != "n" && input != "d" && input != "b" && input != "g" && input != "o")
+	while (input != "i" && input != "v" && input != "e" && input != "n" && input != "d" && input != "b" && input != "g" && input != "o")
 	{
 		clear();
 		cout << table << endl;
@@ -214,6 +262,10 @@ unsigned manageClients(Agency agency)
 	else if (input == "e")
 	{
 		editClients(agency);
+	}
+	else if (input == "i")
+	{
+		packetIndications(agency);
 	}
 	else if (input == "o")
 	{
@@ -857,6 +909,56 @@ unsigned buyPacket(Agency agency)
 	return 0;
 }
 
+unsigned packetIndications(Agency agency) {
+	cout << "How many of the first sites? ";
+	string input;
+	getline(cin, input);
+	while (true) {
+		try {
+			if (stoi(input) < 1)
+				stoi("erro");
+			break;
+		}
+		catch (exception) {
+			cout << "'" << input << "' is not a valid number. Insert a valid positive integer: ";
+			getline(cin, input);
+		}
+	}
+	vector<vector<string>> content = rankingSites(agency, stoi(input));
+	vector<vector<string>> indications;
+	for (unsigned i = 0; i < agency.getClients().size(); ++i){
+		bool has_not_visited = false;
+		for (unsigned j = 0; j < content.size(); ++j){
+			bool visited = false;
+			for (unsigned k = 0; k < agency.getClients().at(i).getPacketList().size(); ++k) {
+				for (unsigned l = 0; l < agency.getClients().at(i).getPacketList().at(k).getSites().size(); ++l) {
+					if (content.at(j).at(1) == agency.getClients().at(i).getPacketList().at(k).getSites().at(l)) {
+						visited = true;
+						break;
+					}
+				}
+				if (visited) {
+					break;
+				}
+			}
+			if (!visited) {
+				has_not_visited = true;
+				indications.push_back({ to_string(agency.getClients().at(i).getVATnumber()), getPacketsBySite(agency.getPackets(),content.at(j).at(1)).at(0).getId()});
+				break;
+			}
+		}
+		if (!has_not_visited){ 
+			vector<string> pair = {to_string(agency.getClients().at(i).getVATnumber()), string("Visited all of " + input + " most vited sites")};
+			indications.push_back(pair);
+		}
+	}
+	clear();
+	cout << Table({ "Client","Sugested packet ID" }, indications) << endl;
+	pause();
+	manageClients(agency);
+	return 0;
+}
+
 // ----------------------------------------------------------------------------------------
 //                                       Packets
 // ----------------------------------------------------------------------------------------/
@@ -1134,22 +1236,23 @@ unsigned viewPacketsDestinationDate(Agency agency) {
 }
 
 unsigned packetSitesRanking(Agency agency) {
-	map<string, int> m; 
-	map<string, int>::const_iterator mi; 
-	pair<string, int> p;
-	for (unsigned i = 0; i < agency.getPackets().size(); ++i) {
-		for (unsigned j = 0; j < agency.getPackets().at(i).getSites().size(); ++j) {
-			m[agency.getPackets().at(i).getSites().at(j)] += agency.getPackets().at(i).getSoldPlaces();
+	cout << "How many of the first sites? ";
+	string input;
+	getline(cin, input);
+	while (true) {
+		try {
+			if (stoi(input) < 1)
+				stoi("erro");
+			break;
+		}
+		catch (exception) {
+			cout << "'" << input << "' is not a valid number. Insert a valid positive integer: ";
+			getline(cin, input);
 		}
 	}
-	int n = 0;
-	clear();
-	for (mi = m.begin(); mi != m.end(); mi++) {
-		n++; 
-		p = *mi;
-		cout << n << " -"<< p.first<< ", "<< p.second<< endl;
-	}
+	cout << Table({"Place", "Site", "Visitors" }, rankingSites(agency, stoi(input))) << endl;
 	pause();
+	managePackets(agency);
 	return 0;
 }
 

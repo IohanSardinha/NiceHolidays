@@ -19,6 +19,7 @@ unsigned editClients(Agency);
 unsigned newClient(Agency);
 unsigned deleteClient(Agency);
 unsigned buyPacket(Agency);
+unsigned packetIndications(Agency);
 unsigned viewPackets(Agency, char);
 unsigned viewFilteredPackets(Agency);
 unsigned viewPacketsDestination(Agency);
