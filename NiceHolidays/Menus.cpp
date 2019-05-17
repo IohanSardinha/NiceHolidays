@@ -834,7 +834,7 @@ unsigned packetSitesRanking(Agency agency) {
 	pair<string, int> p;
 	for (unsigned i = 0; i < agency.getPackets().size(); ++i) {
 		for (unsigned j = 0; j < agency.getPackets().at(i).getSites().size(); ++j) {
-			m[agency.getPackets().at(i).getSites().at(j)]++;
+			m[agency.getPackets().at(i).getSites().at(j)] += agency.getPackets().at(i).getSoldPlaces();
 		}
 	}
 	int n = 0;
