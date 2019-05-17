@@ -107,13 +107,13 @@ unsigned mainMenu(Agency agency){
 unsigned viewInfo(Agency agency)
 {
 	clear();
-	Table table({ "Key", "Action" }, { { "C", "View clients" },{ "P", "View packets" },{ "S", "Packets sold to client" },{ "T", "Total sold packets" },{ "G", "Go back" } });
+	Table table({ "Key", "Action" }, { { "C", "View clients" },{"O","View one specific client"},{ "P", "View packets" },{ "S", "Packets sold to client" },{ "T", "Total sold packets" },{ "G", "Go back" } });
 	cout << table << endl;
 	cout << "Choose an action:";
 	string input;
 	getline(cin, input);
 	input = lower(input);
-	while (input != "c" && input != "p" && input != "s" && input != "t" && input != "g")
+	while (input != "c" && input != "p" && input != "s" && input != "t" && input != "g" && input != "o")
 	{
 		clear();
 		cout << table << endl;
@@ -129,6 +129,10 @@ unsigned viewInfo(Agency agency)
 	else if (input == "p")
 	{
 		viewPackets(agency, 1);
+	}
+	else if (input == "o")
+	{
+		viewClient(agency, 1);
 	}
 	else if (input == "s")
 	{
@@ -184,13 +188,13 @@ unsigned exit(Agency agency)
 unsigned manageClients(Agency agency)
 {
 	clear();
-	Table table({ "Key", "Action" }, { { "V", "View clients" },{ "E", "Edit clients" },{ "N", "New client" },{ "D", "Delete client" } ,{ "B", "Buy packet" },{ "G","Go Back" } });
+	Table table({ "Key", "Action" }, { { "V", "View clients" },{ "O","View one specific client" },{ "E", "Edit clients" },{ "N", "New client" },{ "D", "Delete client" } ,{ "B", "Buy packet" },{ "G","Go Back" } });
 	cout << table << endl;
 	cout << "Choose an action:";
 	string input;
 	getline(cin, input);
 	input = lower(input);
-	while (input != "v" && input != "e" && input != "n" && input != "d" && input != "b" && input != "g")
+	while (input != "v" && input != "e" && input != "n" && input != "d" && input != "b" && input != "g" && input != "o")
 	{
 		clear();
 		cout << table << endl;
@@ -206,6 +210,10 @@ unsigned manageClients(Agency agency)
 	else if (input == "e")
 	{
 		editClients(agency);
+	}
+	else if (input == "o")
+	{
+		viewClient(agency,0);
 	}
 	else if (input == "n")
 	{
@@ -351,6 +359,54 @@ unsigned newClient(Agency agency)
 	return 0;
 }
 
+unsigned viewClient(Agency agency, char origin)
+{
+	string input;
+	cout << "Clients VAT number(0 to exit):";
+	getline(cin, input);
+	int vat;
+	while (true)
+	{
+		try
+		{
+			vat = stoi(input);
+			break;
+		}
+		catch (exception)
+		{
+			cout << "'" << input << "' is not a valid VAT number. Insert a valid integer (0 to exit):";
+			getline(cin, input);
+		}
+	}
+
+	if (vat == 0)
+	{
+		if (origin = 0)
+			manageClients(agency);
+		else
+			viewInfo(agency);
+		return 0;
+	}
+	for (unsigned i = 0; i < agency.getClients().size(); i++)
+	{
+		Client c = agency.getClients().at(i);
+		if (vat == c.getVATnumber())
+		{
+			clear();
+			cout << clientsToTable({ c });
+			pause();
+			if (origin = 0)
+				manageClients(agency);
+			else
+				viewInfo(agency);
+			return 0;
+		}
+	}
+	cout << "Client '" << input << "' not found" << endl;
+	viewClient(agency,origin);
+	return 0;
+}
+
 unsigned editClients(Agency agency)
 {
 	string input;
@@ -386,7 +442,7 @@ unsigned editClients(Agency agency)
 			{
 				clear();
 				cout << clientsToTable({ c }) << endl << endl;
-				cout << Table({ "Key","Field" }, { {"N","Name"}, {"V","VAT number"}, {} }) << endl;
+				cout << Table({ "Key","Field" }, { {"N","Name"}, {"V","VAT number"}, {"F","Family size"}, {"A","Address"},{"P",} }) << endl;
 
 				cout << "Change another field?(y/n): ";
 				getline(cin, input);
