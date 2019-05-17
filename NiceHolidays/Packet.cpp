@@ -152,3 +152,15 @@ string str(Packet packet) {
 	res << "Places: " << packet.getMaxPlaces();
 	return res.str();
 }
+
+Packet getPacketById(vector<Packet> pckts, unsigned id)
+{
+	for (Packet pckt : pckts)
+	{
+		if (abs(stoi(pckt.getId())) == id)
+		{
+			return pckt;
+		}
+	}
+	return Packet();
+}

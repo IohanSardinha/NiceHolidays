@@ -14,20 +14,20 @@ class Address{
 		string postalCode; 											// postal code
 		string location; 											// site
 	public:															// 
-		inline Address();													// 
-		inline Address(vector<string>);
-		inline Address(string, unsigned short, string, string, string);	// 
-		inline string getStreet() const;									// 
-		inline unsigned short getDoorNumber() const;						// 
-		inline string getFloor() const;									// 
-		inline string getPostalCode() const;								// 
-		inline string getLocation() const;									// 
-		inline bool setStreet(string);										// 
-		inline bool setDoorNumber(unsigned short);							// 
-		inline bool setFloor(string);										// 
-		inline bool setPostalCode(string);									// 
-		inline bool setLocation(string);									// 
-		inline friend ostream& operator<<(ostream&, const Address&);		// 
-		inline friend ofstream& operator<<(ofstream&, const Address&);		// 
+		Address();													// 
+		Address(vector<string>);
+		Address(string, unsigned short, string, string, string);	// 
+		string getStreet() const;									// 
+		unsigned short getDoorNumber() const;						// 
+		string getFloor() const;									// 
+		string getPostalCode() const;								// 
+		string getLocation() const;									// 
+		bool setStreet(string);										// 
+		bool setDoorNumber(unsigned short);							// 
+		bool setFloor(string);										// 
+		bool setPostalCode(string);									// 
+		bool setLocation(string);									// 
+		friend ostream& operator<<(ostream&, const Address&);		// 
+		friend ofstream& operator<<(ofstream&, const Address&);		// 
 };
-inline string str(Address address);
+string str(Address address);
