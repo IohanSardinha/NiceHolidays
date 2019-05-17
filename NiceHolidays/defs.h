@@ -15,7 +15,7 @@
 #endif
 const std::string AGENCY_FILE_NAME = "agency.txt";
 const std::string SEPARATOR = "::::::::::";
-const unsigned char TABLE_PADDING = 4;
+const unsigned char TABLE_PADDING = 1;
 
 bool clear();
 std::vector<std::string> split(std::string str, std::string delimiter);

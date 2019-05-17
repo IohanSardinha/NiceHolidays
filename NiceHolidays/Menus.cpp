@@ -123,12 +123,11 @@ unsigned viewInfo(Agency agency)
 	}
 	else if (input == "s")
 	{
-		cout << "Client VAT:";
-		getline(cin, input);
+		packetsSoldToClient(agency,0);
 	}
 	else if (input == "t")
 	{
-
+		soldPackets(agency);
 	}
 	else if (input == "g")
 	{
@@ -197,7 +196,7 @@ unsigned manageClients(Agency agency)
 	}
 	else if (input == "e")
 	{
-
+		editClients(agency);
 	}
 	else if (input == "n")
 	{
@@ -209,7 +208,7 @@ unsigned manageClients(Agency agency)
 	}
 	else if (input == "b")
 	{
-
+		buyPacket(agency);
 	}
 	else if (input == "g")
 	{
@@ -219,7 +218,7 @@ unsigned manageClients(Agency agency)
 	return 0;
 }
 
-unsigned viewClients(Agency agency, unsigned origin)
+unsigned viewClients(Agency agency, char origin)
 {
 	clear();
 	cout << clientsToTable(agency.getClients()) << endl;
@@ -393,7 +392,42 @@ unsigned deleteClient(Agency agency)
 
 unsigned buyPacket(Agency agency)
 {
-	clear();
+	string input;
+	cout << "Clients VAT number(0 to exit):";
+	getline(cin, input);
+	int vat;
+	while (true)
+	{
+		try
+		{
+			vat = stoi(input);
+			break;
+		}
+		catch (exception)
+		{
+			cout << "'" << input << "' is not a valid VAT number. Insert a valid integer (0 to exit):";
+			getline(cin, input);
+		}
+	}
+
+	if (vat == 0)
+	{
+		manageClients(agency);
+		return 0;
+	}
+	for (unsigned i = 0; i < agency.getClients().size(); i++)
+	{
+		Client c = agency.getClients().at(i);
+		if (vat == c.getVATnumber())
+		{
+			clear();
+			//PENDENT INPLEMENTATION
+			manageClients(agency);
+			return 0;
+		}
+	}
+	cout << "Client '" << input << "' not found" << endl;
+	buyPacket(agency);
 	return 0;
 }
 
@@ -403,7 +437,7 @@ unsigned buyPacket(Agency agency)
 unsigned managePackets(Agency agency)
 {
 	clear();
-	Table table({ "Key", "Action" }, { { "V", "View packets" },{ "P", "Packets sold to client" },{ "E", "Edit packets" },{ "N", "New packet" },{ "D", "Delete packet" } ,{ "G","Go Back" } });
+	Table table({ "Key", "Action" }, { { "V", "View packets" },{ "P", "Packets sold to client" },{ "E", "Edit packets" },{ "N", "New packet" },{ "D", "Close packet" } ,{ "G","Go Back" } });
 	cout << table << endl;
 	cout << "Choose an action:";
 	string input;
@@ -420,11 +454,11 @@ unsigned managePackets(Agency agency)
 
 	if (input == "v")
 	{
-		viewPackets(agency, 0);
+		viewPackets(agency,0);
 	}
 	else if (input == "e")
 	{
-
+		editClients(agency);
 	}
 	else if (input == "n")
 	{
@@ -436,7 +470,7 @@ unsigned managePackets(Agency agency)
 	}
 	else if (input == "p")
 	{
-
+		packetsSoldToClient(agency, 1);
 	}
 	else if (input == "g")
 	{
@@ -446,7 +480,7 @@ unsigned managePackets(Agency agency)
 	return 0;
 }
 
-unsigned viewPackets(Agency agency, unsigned origin)
+unsigned viewPackets(Agency agency, char origin)
 {
 	clear();
 	cout << packetsToTable(agency.getPackets()) << endl;
@@ -574,13 +608,12 @@ unsigned deletePacket(Agency agency)
 		{
 			clear();
 			cout << packetsToTable({ p }) << endl;
-			cout << "Are you sure you want to delete packet " << p.getId() << "?(y/n)" << endl;
+			cout << "Are you sure you want to close packet " << p.getId() << "?(y/n)" << endl;
 			getline(cin, input);
 			if (input == "y")
 			{
-				vector<Packet> temp = agency.getPackets();
-				temp.erase(temp.begin() + i);
-				agency.setPackets(temp);
+				if (stoi(p.getId()) > 0)
+					p.setId(to_string(-stoi(p.getId())));
 			}
 			managePackets(agency);
 			return 0;
@@ -591,14 +624,75 @@ unsigned deletePacket(Agency agency)
 	return 0;
 }
 
-unsigned packetsSoldToClient(Agency)
+unsigned packetsSoldToClient(Agency agency, char origin)
 {
-	clear();
+
+	string input;
+	cout << "Clients VAT number(0 to exit):";
+	getline(cin, input);
+	int vat;
+	while (true)
+	{
+		try
+		{
+			vat = stoi(input);
+			break;
+		}
+		catch (exception)
+		{
+			cout << "'" << input << "' is not a valid VAT number. Insert a valid integer (0 to exit):";
+			getline(cin, input);
+		}
+	}
+
+	if (vat == 0)
+	{
+		if (origin == 0)
+			viewInfo(agency);
+		else
+			managePackets(agency);
+		return 0;
+	}
+	for (unsigned i = 0; i < agency.getClients().size(); i++)
+	{
+		Client c = agency.getClients().at(i);
+		if (vat == c.getVATnumber())
+		{
+			clear();
+			
+			cout << "Packets sold to : " << c.getName() << endl;
+			cout << packetsToTable(c.getPacketList()) << endl;
+			pause();
+
+			if (origin == 0)
+				viewInfo(agency);
+			else
+				managePackets(agency);
+			return 0;
+		}
+	}
+	cout << "Client '" << input << "' not found" << endl;
+	packetsSoldToClient(agency,origin);
+
 	return 0;
 }
 
-unsigned soldPackets(Agency)
+unsigned soldPackets(Agency agency)
 {
 	clear();
+	double price = 0;
+	unsigned sold = 0;
+	for (Packet pckt : agency.getPackets())
+	{
+		price += pckt.getSoldPlaces() * pckt.getPricePerPerson();
+		sold += pckt.getSoldPlaces();
+	}
+	ostringstream p;
+	p << fixed << setprecision(2) << price;
+	cout << Table({"Total","Value"}, { {"Packets sold",to_string(sold) +" packets"},{"Price","$ "+p.str() } });
+	pause();
+
+	viewInfo(agency);
+
 	return 0;
 }
