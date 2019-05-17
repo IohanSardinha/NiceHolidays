@@ -19,7 +19,6 @@ bool clear() {
 //Splits a string by a specific delimiter and puts it into a vector
 vector<string> split(string str, string delimiter)
 {
-
 	if (str.empty() || str.find(delimiter) == str.npos)
 	{
 		return { str };

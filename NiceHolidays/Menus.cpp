@@ -2,7 +2,6 @@
 #include "Menus.h"
 #include "defs.h"
 
-
  Table clientsToTable(vector<Client> cs)
 {
 	vector<string> header = { "Name","VAT","Family size","Address","Packets","Total purchased" };
@@ -288,6 +287,13 @@ unsigned newClient(Agency agency)
 	cout << clientsToTable({ newClient }) << endl;
 	cout << "Client address(Street / floor / door / Postal-Code / Location):";
 	getline(cin, input);
+	while (true)
+	{
+		if (split(input, "/").size() > 1)
+			break;
+		cout << input << " is not a valid address. Insert a valid address (Street / floor / door / Postal-Code / Location): ";
+		getline(cin, input);
+	}
 	newClient.setAddress(split(input,"/"));
 
 	//PACKETS
@@ -338,7 +344,52 @@ unsigned newClient(Agency agency)
 
 unsigned editClients(Agency agency)
 {
-	clear();
+	string input;
+	cout << "Clients VAT number(0 to exit):";
+	getline(cin, input);
+	int vat;
+	while (true)
+	{
+		try
+		{
+			vat = stoi(input);
+			break;
+		}
+		catch (exception)
+		{
+			cout << "'" << input << "' is not a valid VAT number. Insert a valid integer (0 to exit):";
+			getline(cin, input);
+		}
+	}
+
+	if (vat == 0)
+	{
+		manageClients(agency);
+		return 0;
+	}
+	for (unsigned i = 0; i < agency.getClients().size(); i++)
+	{
+		Client c = agency.getClients().at(i);
+		if (vat == c.getVATnumber())
+		{
+			bool another = false;
+			do
+			{
+				clear();
+				cout << clientsToTable({ c }) << endl << endl;
+				cout << Table({ "Key","Field" }, { {"N","Name"}, {"V","VAT number"}, {} }) << endl;
+
+				cout << "Change another field?(y/n): ";
+				getline(cin, input);
+				another = (input == "y");
+			} while (another);
+
+			manageClients(agency);
+			return 0;
+		}
+	}
+	cout << "Client '" << input << "' not found" << endl;
+	editClients(agency);
 	return 0;
 }
 
@@ -699,8 +750,8 @@ unsigned packetsSoldToClient(Agency agency, char origin)
 		{
 			clear();
 			
-			cout << "Packets sold to : " << c.getName() << endl;
-			cout << packetsToTable(c.getPacketList()) << endl;
+			cout << packetsToTable(c.getPacketList());
+			cout << "Packets sold to : " << c.getName() << endl << endl;
 			pause();
 
 			if (origin == 0)
