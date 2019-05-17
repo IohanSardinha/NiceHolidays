@@ -41,10 +41,11 @@
 					sites += ", ";
 				}
 			}
-		}
-		else
-		{
-			sites = p.getSites().at(0);
+		}else{
+			if (p.getSites().size() == 0)
+				sites = "";
+			else
+				sites = p.getSites().at(0);
 		}
 		ostringstream price;
 		price << fixed << setprecision(2) << p.getPricePerPerson();
@@ -437,13 +438,13 @@ unsigned buyPacket(Agency agency)
 unsigned managePackets(Agency agency)
 {
 	clear();
-	Table table({ "Key", "Action" }, { { "V", "View packets" },{ "P", "Packets sold to client" },{ "E", "Edit packets" },{ "N", "New packet" },{ "D", "Close packet" } ,{ "G","Go Back" } });
+	Table table({ "Key", "Action" }, { { "V", "View packets" },{ "P", "Packets sold to client" },{ "E", "Edit packets" },{ "N", "New packet" },{ "C", "Close packet" } ,{ "G","Go Back" } });
 	cout << table << endl;
 	cout << "Choose an action:";
 	string input;
 	getline(cin, input);
 	input = lower(input);
-	while (input != "v" && input != "e" && input != "n" && input != "d" && input != "b" && input != "g")
+	while (input != "v" && input != "e" && input != "n" && input != "c" && input != "b" && input != "g")
 	{
 		clear();
 		cout << table << endl;
@@ -464,7 +465,7 @@ unsigned managePackets(Agency agency)
 	{
 		newPacket(agency);
 	}
-	else if (input == "d")
+	else if (input == "c")
 	{
 		deletePacket(agency);
 	}
@@ -494,15 +495,10 @@ unsigned viewPackets(Agency agency, char origin)
 }
 
 unsigned newPacket(Agency agency) {
-	string input;
+	string input, sites;
 	Packet p(false, '?');
 	clear();
-	vector<string> header = { "ID","Sites","Start date","End date","Price per person","Sold places","Max places" };
-	string sites = "";
-	ostringstream price;
-	price << fixed << setprecision(2) << p.getPricePerPerson();
-	vector<string> packet = { p.getId(),sites,str(p.getBeginDate()),str(p.getEndDate()),price.str(),to_string(p.getSoldPlaces()),to_string(p.getMaxPlaces()) };
-	cout << Table(header, { packet }) << '\n';
+	cout << packetsToTable({p}) << '\n';
 	cout << "Packet Sites: ";
 	getline(cin, input);
 	vector<string> splitted = strip(split(input, "-"));
@@ -511,55 +507,35 @@ unsigned newPacket(Agency agency) {
 		vector<string> v2 = strip(split(splitted.at(1), ","));
 		v2.insert(v2.begin(), v.begin(), v.end());
 		p.setSites(v2);
+	} else {
+		p.setSites({splitted.at(0)});
 	}
-	else {
-		p.setSites({ splitted.at(0) });
-	}
-	if (p.getSites().size() > 1) {
-		sites = p.getSites().at(0) + " - ";
-		for (size_t i = 1; i < p.getSites().size(); i++) {
-			sites += p.getSites().at(i);
-			if (i != p.getSites().size() - 1) {
-				sites += ", ";
-			}
-		}
-	}
-	else {
-		sites = p.getSites().at(0);
-	}
-	packet = { p.getId(),sites,str(p.getBeginDate()),str(p.getEndDate()),price.str(),to_string(p.getSoldPlaces()),to_string(p.getMaxPlaces()) };
 	clear();
-	cout << Table(header, { packet }) << '\n';
+	cout << packetsToTable({p}) << '\n';
 	cout << "Packet Start Date (dd/mm/yyyy): ";
 	getline(cin, input);
 	splitted = split(input, "/");
 	vector<int> new_date = { stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)) };
 	p.setBeginDate(Date(new_date.at(0), new_date.at(1), new_date.at(2)));
-	packet = { p.getId(),sites,str(p.getBeginDate()),str(p.getEndDate()),price.str(),to_string(p.getSoldPlaces()),to_string(p.getMaxPlaces()) };
 	clear();
-	cout << Table(header, { packet }) << '\n';
+	cout << packetsToTable({ p }) << '\n';
 	cout << "Packet End Date (dd/mm/yyyy): ";
 	getline(cin, input);
 	splitted = split(input, "/");
 	new_date = { stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)) };
 	p.setEndDate(Date(new_date.at(0), new_date.at(1), new_date.at(2)));
-	packet = { p.getId(),sites,str(p.getBeginDate()),str(p.getEndDate()),price.str(),to_string(p.getSoldPlaces()),to_string(p.getMaxPlaces()) };
 	clear();
-	cout << Table(header, { packet }) << '\n';
+	cout << packetsToTable({ p }) << '\n';
 	cout << "Packet Price per Person: ";
 	getline(cin, input);
 	p.setPricePerPerson(stod(input));
-	ostringstream new_price;
-	new_price << fixed << setprecision(2) << p.getPricePerPerson();
-	packet = { p.getId(),sites,str(p.getBeginDate()),str(p.getEndDate()),new_price.str(),to_string(p.getSoldPlaces()),to_string(p.getMaxPlaces()) };
 	clear();
-	cout << Table(header, { packet }) << '\n';
+	cout << packetsToTable({ p }) << '\n';
 	cout << "Packet Max Places: ";
-	p.setMaxPlaces(stoi(input));
 	getline(cin, input);
-	packet = { p.getId(),sites,str(p.getBeginDate()),str(p.getEndDate()),new_price.str(),to_string(p.getSoldPlaces()),to_string(p.getMaxPlaces()) };
+	p.setMaxPlaces(stoi(input));
 	clear();
-	cout << Table(header, { packet }) << '\n';
+	cout << packetsToTable({ p }) << '\n';
 	pause();
 
 	agency.addPacket(p);
@@ -578,7 +554,7 @@ unsigned editPackets(Agency agency)
 unsigned deletePacket(Agency agency)
 {
 	string input;
-	cout << "Packet ID(0 to exit):";
+	cout << "Packet ID (0 to exit): ";
 	getline(cin, input);
 	int vat;
 	while (true)
@@ -603,24 +579,28 @@ unsigned deletePacket(Agency agency)
 
 	for (unsigned i = 0; i < agency.getPackets().size(); i++)
 	{
-		Packet p = agency.getPackets().at(i);
-		if (vat == abs(stoi(p.getId())))
+		if (vat == abs(stoi(agency.getPackets().at(i).getId())))
 		{
 			clear();
-			cout << packetsToTable({ p }) << endl;
-			cout << "Are you sure you want to close packet " << p.getId() << "?(y/n)" << endl;
+			cout << packetsToTable({ agency.getPackets().at(i) }) << endl;
+			cout << "Are you sure you want to close packet " << agency.getPackets().at(i).getId() << "? (y/n) ";
 			getline(cin, input);
 			if (input == "y")
 			{
-				if (stoi(p.getId()) > 0)
-					p.setId(to_string(-stoi(p.getId())));
+				if (stoi(agency.getPackets().at(i).getId()) > 0) {
+					string new_id = "-" + agency.getPackets().at(i).getId();
+					cout << new_id;
+					agency.getPackets().at(i).setId(new_id);
+					cout << packetsToTable({ agency.getPackets().at(i) }) << endl;
+					pause();
+				}
 			}
 			managePackets(agency);
 			return 0;
 		}
 	}
-	cout << "Client '" << input << "' not found" << endl;
-	deleteClient(agency);
+	cout << "Packet '" << input << "' not found" << endl;
+	deletePacket(agency);
 	return 0;
 }
 

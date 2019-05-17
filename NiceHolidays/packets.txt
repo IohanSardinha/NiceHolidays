@@ -1,6 +1,6 @@
-3
+4
 1
-Madeira       -       Funchal,       Porto Santo
+Madeira - Funchal, Porto Santo
 2019/08/01
 2019/08/05
 300
@@ -16,9 +16,17 @@ Veneza
 24
 ::::::::::
 3
-Douro vinhateiro       -       Porto,       Regua,       Pinhao,       Vila Real
+Douro vinhateiro - Porto, Regua, Pinhao, Vila Real
 2019/09/21
 2019/09/22
 100
 120
 62
+::::::::::
+4
+Sao Paulo - Franca, Se
+1999/07/20
+1999/07/27
+200
+50
+0
