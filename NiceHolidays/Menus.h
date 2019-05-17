@@ -13,6 +13,7 @@ unsigned exit(Agency);
 unsigned manageClients(Agency);
 unsigned managePackets(Agency);
 unsigned viewInfo(Agency);
+unsigned viewClient(Agency,char);
 unsigned viewClients(Agency, char);
 unsigned editClients(Agency);
 unsigned newClient(Agency);

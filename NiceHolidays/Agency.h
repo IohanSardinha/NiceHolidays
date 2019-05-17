@@ -33,6 +33,7 @@ class Agency{
 		vector<Packet> getPackets() const;
 		bool addClient(Client);
 		bool addPacket(Packet);
+		bool updatePacket(Packet);
 		bool setName(string name);
 		bool setVATnumber(unsigned VATnumber);
 		bool setAddress(Address address);
