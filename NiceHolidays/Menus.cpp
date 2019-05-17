@@ -257,15 +257,25 @@ unsigned newClient(Agency agency)
 	//NAME
 	clear();
 	cout << clientsToTable({ newClient }) << endl;
-	cout << "Client name:";
+	cout << "Client name(0 to exit):";
 	getline(cin, input);
+	if (input == "0")
+	{
+		manageClients(agency);
+		return 0;
+	}
 	newClient.setName(input);
 
 	//VAT
 	clear();
 	cout << clientsToTable({ newClient }) << endl;
-	cout << "Client VAT number:";
+	cout << "Client VAT number(0 to exit):";
 	getline(cin, input);
+	if (input == "0")
+	{
+		manageClients(agency);
+		return 0;
+	}
 	while (true)
 	{
 		try
@@ -275,16 +285,26 @@ unsigned newClient(Agency agency)
 		}
 		catch (exception)
 		{
-			cout <<"'" << input << "' is not a valid input. Insert a valid integer:";
+			cout <<"'" << input << "' is not a valid input. Insert a valid integer(0 to exit):";
 			getline(cin, input);
+			if (input == "0")
+			{
+				manageClients(agency);
+				return 0;
+			}
 		}
 	}
 
 	//FAMILY SIZE
 	clear();
 	cout << clientsToTable({ newClient }) << endl;
-	cout << "Client family size:";
+	cout << "Client family size(0 to exit):";
 	getline(cin, input);
+	if (input == "0")
+	{
+		manageClients(agency);
+		return 0;
+	}
 	while (true)
 	{
 		try
@@ -294,30 +314,50 @@ unsigned newClient(Agency agency)
 		}
 		catch (exception)
 		{
-			cout << "'" << input << "' is not a valid input. Insert a valid integer:";
+			cout << "'" << input << "' is not a valid input. Insert a valid integer(0 to exit):";
 			getline(cin, input);
+			if (input == "0")
+			{
+				manageClients(agency);
+				return 0;
+			}
 		}
 	}
 
 	//ADDRESS
 	clear();
 	cout << clientsToTable({ newClient }) << endl;
-	cout << "Client address(Street / floor / door / Postal-Code / Location):";
+	cout << "Client address(Street / floor / door / Postal-Code / Location)(0 to exit):";
 	getline(cin, input);
+	if (input == "0")
+	{
+		manageClients(agency);
+		return 0;
+	}
 	while (true)
 	{
-		if (split(input, "/").size() > 1)
+		if (split(input, "/").size() > 4)
 			break;
-		cout << input << " is not a valid address. Insert a valid address (Street / floor / door / Postal-Code / Location): ";
+		cout << input << " is not a valid address. Insert a valid address (Street / floor / door / Postal-Code / Location)(0 to exit): ";
 		getline(cin, input);
+		if (input == "0")
+		{
+			manageClients(agency);
+			return 0;
+		}
 	}
 	newClient.setAddress(split(input,"/"));
 
 	//PACKETS
 	clear();
 	cout << clientsToTable({ newClient }) << endl;
-	cout << "Client packets(separated by ';':";
+	cout << "Client packets(separated by ';')(0 to exit):";
 	getline(cin, input);
+	if (input == "0")
+	{
+		manageClients(agency);
+		return 0;
+	}
 	vector<Packet> packets;
 	vector<string> packsIds = split(input, ";");
 	if (!(packsIds.size() == 1 && packsIds.at(0).empty()))
@@ -332,8 +372,13 @@ unsigned newClient(Agency agency)
 	//PACKETS
 	clear();
 	cout << clientsToTable({ newClient }) << endl;
-	cout << "Client total purchased:";
+	cout << "Client total purchased(-1 to exit):";
 	getline(cin, input);
+	if (input == "-1")
+	{
+		manageClients(agency);
+		return 0;
+	}
 	while (true)
 	{
 		try
@@ -343,8 +388,13 @@ unsigned newClient(Agency agency)
 		}
 		catch (exception)
 		{
-			cout << "'" << input << "' is not a valid input. Insert a valid integer:";
+			cout << "'" << input << "' is not a valid input. Insert a valid integer(-1 to exit):";
 			getline(cin, input);
+			if (input == "-1")
+			{
+				manageClients(agency);
+				return 0;
+			}
 		}
 	}
 
