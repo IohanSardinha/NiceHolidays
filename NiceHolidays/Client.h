@@ -26,6 +26,7 @@ class Client{
 		Address getAddress() const;
 		vector<Packet> getPacketList() const;
 		unsigned getTotalPurchased() const;
+		bool hasPacket(Packet) const;
 		bool setName(string);
 		bool setVATnumber(unsigned);
 		bool setFamilySize(unsigned short);

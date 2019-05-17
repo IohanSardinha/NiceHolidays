@@ -43,6 +43,12 @@ vector<Packet> Client::getPacketList() const {
 unsigned Client::getTotalPurchased() const {
 	return totalPurchased;
 }
+
+bool Client::hasPacket(Packet p) const
+{
+	return !getPacketById(packets, stoi(p.getId())).isEmpty();
+}
+
 // ----------------------------------------------------------------------------------------
 //                                           Sets                                          
 // ----------------------------------------------------------------------------------------

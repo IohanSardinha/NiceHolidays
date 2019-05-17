@@ -10,6 +10,7 @@
 using namespace std;
 class Packet{
 	private:
+		bool empty = false;
 		static unsigned long numPackets;							// 
 		string id; 													// packet unique identifier
 		vector<string> sites; 										// touristic sites to visit
@@ -22,6 +23,8 @@ class Packet{
 		Packet();
 		Packet(bool id,int nothing);
 		Packet(vector<string>, Date, Date, double, unsigned);		// 
+		bool isEmpty() const;
+		bool isAvailable() const;
 		string getId() const;										// 
 		unsigned long getNumPackets() const;
 		vector<string> getSites() const;							// 

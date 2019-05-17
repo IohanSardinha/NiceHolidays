@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------------
 Packet::Packet() 
 {
+	empty = true;
 }
 
 Packet::Packet(bool id,int nothing) 
@@ -35,6 +36,22 @@ Packet::Packet(vector<string> s, Date b, Date e, double p, unsigned m){
 // ----------------------------------------------------------------------------------------
 string Packet::getId() const {
 	return id;
+}
+
+bool Packet::isEmpty() const
+{
+	return empty;
+}
+
+bool Packet::isAvailable() const
+{
+	if (isEmpty())
+		return false;
+
+	if (stoi(id) >= 0)
+		return true;
+	
+	return false;
 }
 
 unsigned long Packet::getNumPackets() const
@@ -69,6 +86,7 @@ bool Packet::setId(string i) {
 	}catch (exception){
 		return false;
 	}
+	empty = false;
 	id = i;
 	return true;
 }

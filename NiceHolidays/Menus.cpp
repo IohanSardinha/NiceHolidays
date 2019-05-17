@@ -2,7 +2,6 @@
 #include "Menus.h"
 #include "defs.h"
 
-
  Table clientsToTable(vector<Client> cs)
 {
 	vector<string> header = { "Name","VAT","Family size","Address","Packets","Total purchased" };
@@ -297,6 +296,13 @@ unsigned newClient(Agency agency)
 	cout << clientsToTable({ newClient }) << endl;
 	cout << "Client address(Street / floor / door / Postal-Code / Location):";
 	getline(cin, input);
+	while (true)
+	{
+		if (split(input, "/").size() > 1)
+			break;
+		cout << input << " is not a valid address. Insert a valid address (Street / floor / door / Postal-Code / Location): ";
+		getline(cin, input);
+	}
 	newClient.setAddress(split(input,"/"));
 
 	//PACKETS
@@ -347,7 +353,52 @@ unsigned newClient(Agency agency)
 
 unsigned editClients(Agency agency)
 {
-	clear();
+	string input;
+	cout << "Clients VAT number(0 to exit):";
+	getline(cin, input);
+	int vat;
+	while (true)
+	{
+		try
+		{
+			vat = stoi(input);
+			break;
+		}
+		catch (exception)
+		{
+			cout << "'" << input << "' is not a valid VAT number. Insert a valid integer (0 to exit):";
+			getline(cin, input);
+		}
+	}
+
+	if (vat == 0)
+	{
+		manageClients(agency);
+		return 0;
+	}
+	for (unsigned i = 0; i < agency.getClients().size(); i++)
+	{
+		Client c = agency.getClients().at(i);
+		if (vat == c.getVATnumber())
+		{
+			bool another = false;
+			do
+			{
+				clear();
+				cout << clientsToTable({ c }) << endl << endl;
+				cout << Table({ "Key","Field" }, { {"N","Name"}, {"V","VAT number"}, {} }) << endl;
+
+				cout << "Change another field?(y/n): ";
+				getline(cin, input);
+				another = (input == "y");
+			} while (another);
+
+			manageClients(agency);
+			return 0;
+		}
+	}
+	cout << "Client '" << input << "' not found" << endl;
+	editClients(agency);
 	return 0;
 }
 
@@ -430,9 +481,69 @@ unsigned buyPacket(Agency agency)
 		Client c = agency.getClients().at(i);
 		if (vat == c.getVATnumber())
 		{
-			clear();
-			//PENDENT INPLEMENTATION
-			manageClients(agency);
+			cout << "Client " << c.getName() << " found" << endl;
+
+			do
+			{
+				cout << "Package ID(0 to exit):";
+				getline(cin, input);
+
+				while (true)
+				{
+					if (input == "0")
+					{
+						manageClients(agency);
+						return 0;
+					}
+					try
+					{
+						stoi(input);
+						break;
+					}
+					catch (exception)
+					{
+						cout << input << " is not a valid ID. Insert a valid integer(0 to exit):";
+						getline(cin, input);
+					}
+				}
+
+				Packet packet = getPacketById(agency.getPackets(), stoi(input));
+				
+				if (!packet.isEmpty() && packet.isAvailable() && !c.hasPacket(packet))
+				{
+					clear();
+					cout << packetsToTable({ packet }) << endl;
+					cout << "Should " << c.getName() << " buy packet " << packet.getId() << "? (y/n): ";
+					getline(cin, input);
+					if (input == "y")
+					{
+						vector<Client> cs = agency.getClients();
+						vector<Packet> pckts = c.getPacketList();
+						pckts.push_back(packet);
+						cs.at(i).setPacketList(pckts);
+						agency.setClients(cs);
+
+						cout << c.getName() << " bought packet " << packet.getId() << endl;
+					}
+					else
+						cout << c.getName() << " did not buy packet" << endl;
+					pause();
+					manageClients(agency);
+					return 0;
+				}
+				else if(!packet.isAvailable())
+				{
+					cout << "Packet " << input << " is not available" << endl;
+				}
+				else if (c.hasPacket(packet))
+				{
+					cout << c.getName() << " already bought packet " << packet.getId() << endl;
+				}
+				else
+					cout << "Packet " << input << " not found" << endl;
+
+			} while (true);
+			
 			return 0;
 		}
 	}
@@ -808,8 +919,8 @@ unsigned packetsSoldToClient(Agency agency, char origin)
 		{
 			clear();
 			
-			cout << "Packets sold to : " << c.getName() << endl;
-			cout << packetsToTable(c.getPacketList()) << endl;
+			cout << packetsToTable(c.getPacketList());
+			cout << "Packets sold to : " << c.getName() << endl << endl;
 			pause();
 
 			if (origin == 0)
