@@ -224,6 +224,19 @@ bool Agency::setName(string name){
 	return true;
 }
 
+bool Agency::updatePacket(Packet p)
+{
+	for (unsigned i = 0; i < packets.size(); i++)
+	{
+		if (packets.at(i).getId() == p.getId())
+		{
+			packets.at(i) = p;
+			return true;
+		}
+	}
+	return false;
+}
+
 bool Agency::setVATnumber(unsigned VATnumber){
 	this->VATnumber = VATnumber;
 	return true;

@@ -406,6 +406,15 @@ unsigned newClient(Agency agency)
 	cout << clientsToTable({ newClient }) << endl;
 	pause();
 
+	for (Packet p : newClient.getPacketList())
+	{
+		if (p.isAvailable())
+		{
+			p.setSoldPlaces(p.getSoldPlaces() + newClient.getFamilySize());
+			agency.updatePacket(p);
+		}
+	}
+
 	agency.addClient(newClient);
 
 	save(agency);
@@ -720,6 +729,14 @@ unsigned deleteClient(Agency agency)
 				vector<Client> temp = agency.getClients();
 				temp.erase(temp.begin() + i);
 				agency.setClients(temp);
+				for (Packet p : c.getPacketList())
+				{
+					if (p.isAvailable())
+					{
+						p.setSoldPlaces(p.getSoldPlaces() - c.getFamilySize());
+						agency.updatePacket(p);
+					}
+				}
 				save(agency);
 			}
 			manageClients(agency);
@@ -789,7 +806,7 @@ unsigned buyPacket(Agency agency)
 
 				Packet packet = getPacketById(agency.getPackets(), stoi(input));
 				
-				if (!packet.isEmpty() && packet.isAvailable() && !c.hasPacket(packet))
+				if (!packet.isEmpty() && packet.isAvailable() && !c.hasPacket(packet) && (packet.getMaxPlaces() - packet.getSoldPlaces() >= c.getFamilySize()))
 				{
 					clear();
 					cout << packetsToTable({ packet }) << endl;
@@ -800,11 +817,14 @@ unsigned buyPacket(Agency agency)
 						vector<Client> cs = agency.getClients();
 						vector<Packet> pckts = c.getPacketList();
 						pckts.push_back(packet);
+						packet.setSoldPlaces(packet.getSoldPlaces() + c.getFamilySize());
 						cs.at(i).setPacketList(pckts);
 						agency.setClients(cs);
+						agency.updatePacket(packet);
+						save(agency);
+
 
 						cout << c.getName() << " bought packet " << packet.getId() << endl;
-						save(agency);
 					}
 					else
 						cout << c.getName() << " did not buy packet" << endl;
@@ -819,6 +839,10 @@ unsigned buyPacket(Agency agency)
 				else if (c.hasPacket(packet))
 				{
 					cout << c.getName() << " already bought packet " << packet.getId() << endl;
+				}
+				else if (!(packet.getMaxPlaces() - packet.getSoldPlaces() >= c.getFamilySize()))
+				{
+					cout << "Packet " << input << " is sold out" << endl;
 				}
 				else
 					cout << "Packet " << input << " not found" << endl;
