@@ -589,10 +589,9 @@ unsigned deletePacket(Agency agency)
 			{
 				if (stoi(agency.getPackets().at(i).getId()) > 0) {
 					string new_id = "-" + agency.getPackets().at(i).getId();
-					cout << new_id;
-					agency.getPackets().at(i).setId(new_id);
-					cout << packetsToTable({ agency.getPackets().at(i) }) << endl;
-					pause();
+					vector<Packet> pckts = agency.getPackets();
+					pckts.at(i).setId(new_id);
+					agency.setPackets(pckts);
 				}
 			}
 			managePackets(agency);
