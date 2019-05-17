@@ -195,7 +195,12 @@ string str(Date date) {
 	aux = to_string(date.getMonth());
 	string m = string((2 - aux.size()),zero) + aux;
 	aux = to_string(date.getYear());
-	string y = string((4 - aux.size()),zero) + aux;
+	string y;
+	if (aux.size() < 4){
+		y = string((4 - aux.size()), zero) + aux;
+	} else {
+		y = aux;
+	}
 	return y + "/" + m + "/" + d;
 }
 bool bissextile(unsigned year) {

@@ -558,13 +558,13 @@ unsigned buyPacket(Agency agency)
 unsigned managePackets(Agency agency)
 {
 	clear();
-	Table table({ "Key", "Action" }, { { "V", "View packets" },{ "P", "Packets sold to client" },{ "E", "Edit packets" },{ "N", "New packet" },{ "C", "Close packet" } ,{ "G","Go Back" } });
+	Table table({ "Key", "Action" }, { { "V", "View packets" }, { "F","View filtered packets" }, {"R", "View packet sites ranked"}, { "P", "Packets sold to client" },{ "E", "Edit packets" },{ "N", "New packet" },{ "C", "Close packet" } ,{ "G","Go Back" } });
 	cout << table << endl;
 	cout << "Choose an action: ";
 	string input;
 	getline(cin, input);
 	input = lower(input);
-	while (input != "v" && input != "e" && input != "n" && input != "c" && input != "b" && input != "g" && input != "p")
+	while (input != "v" && input != "e" && input != "n" && input != "c" && input != "b" && input != "g" && input != "p" && input != "f" && input != "r")
 	{
 		clear();
 		cout << table << endl;
@@ -597,6 +597,11 @@ unsigned managePackets(Agency agency)
 	{
 		mainMenu(agency);
 	}
+	else if (input == "f") {
+		viewFilteredPackets(agency);
+	}else if (input == "r") {
+		packetSitesRanking(agency);
+	}
 
 	return 0;
 }
@@ -611,6 +616,235 @@ unsigned viewPackets(Agency agency, char origin)
 		managePackets(agency);
 	else
 		viewInfo(agency);
+	return 0;
+}
+
+unsigned viewFilteredPackets(Agency agency) {
+	clear();
+	Table table({ "Key", "Filter" }, { { "D", "For a destination" }, { "B","Between two dates" }, { "DB", "For a destination and between two dates" }, { "G", "Go back" } });
+	cout << table << endl;
+	cout << "Choose an action: ";
+	string input;
+	getline(cin, input);
+	input = lower(input);
+	while (input != "d" && input != "b" && input != "db" && input != "g")
+	{
+		clear();
+		cout << table << endl;
+		cout << "'" << input << "' is not a valid action key, choose a valid action: ";
+		getline(cin, input);
+		input = lower(input);
+	}
+	if (input == "d")
+	{
+		viewPacketsDestination(agency);
+	}
+	else if (input == "b")
+	{
+		viewPacketsDate(agency);
+	}
+	else if (input == "db")
+	{
+		viewPacketsDestinationDate(agency);
+	}
+	else if (input == "g")
+	{
+		managePackets(agency);
+	}
+	return 0;
+}
+
+unsigned viewPacketsDestination(Agency agency) {
+	cout << "Destination: ";
+	string input;
+	getline(cin, input);
+	input = lower(input);
+	vector<Packet> pckts;
+	for (unsigned i = 0; i < agency.getPackets().size(); ++i) {
+		for (unsigned j = 0; j < agency.getPackets().at(i).getSites().size(); ++j) {
+			if (lower(agency.getPackets().at(i).getSites().at(j)) == input) {
+				pckts.push_back(agency.getPackets().at(i));
+				break;
+			}
+		}
+	}
+	clear();
+	if (pckts.size() == 0)
+		cout << "No packet matches this destination\n" << endl;
+	else
+		cout << packetsToTable(pckts) << endl;
+	if (yesOrNo("Another destination?")) {
+		viewPacketsDestination(agency);
+		clear();
+	} else {
+		viewFilteredPackets(agency);
+	}
+	return 0;
+}
+
+unsigned viewPacketsDate(Agency agency) {
+	string input;
+	vector<string> splitted;
+	vector<Packet> pckts;
+	cout << "First date (dd/mm/yyyy): ";
+	getline(cin, input);
+	splitted = split(input, "/");
+	while (true) {
+		try {
+			stoi(splitted.at(0));
+			stoi(splitted.at(1));
+			stoi(splitted.at(2));
+			if (!validDate(stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)))) {
+				stoi("erro");
+			}
+			break;
+		} catch (exception) {
+			cout << "'" << input << "' is not a valid date. Insert a valid date: ";
+			getline(cin, input);
+			splitted = split(input, "/");
+		}
+	}
+	Date date1(stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)));
+	cout << "Second date (dd/mm/yyyy): ";
+	getline(cin, input);
+	splitted = split(input, "/");
+	while (true) {
+		try {
+			stoi(splitted.at(0));
+			stoi(splitted.at(1));
+			stoi(splitted.at(2));
+			if (!validDate(stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)))) {
+				stoi("erro");
+			}
+			break;
+		}
+		catch (exception) {
+			cout << "'" << input << "' is not a valid date. Insert a valid date: ";
+			getline(cin, input);
+			splitted = split(input, "/");
+		}
+	}
+	Date date2(stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)));
+	if (date2 < date1) {
+		Date aux = date1;
+		date1 = date2;
+		date2 = aux;
+	}
+	for (unsigned i = 0; i < agency.getPackets().size(); ++i) {
+		for (unsigned j = 0; j < agency.getPackets().at(i).getSites().size(); ++j) {
+			if (agency.getPackets().at(i).getBeginDate() >= date1 && agency.getPackets().at(i).getEndDate() <= date2) {
+				pckts.push_back(agency.getPackets().at(i));
+				break;
+			}
+		}
+	}
+	clear();
+	if (pckts.size() == 0)
+		cout << "No packet matches this interval\n" << endl;
+	else
+		cout << packetsToTable(pckts) << endl;
+	if (yesOrNo("Another interval?")) {
+		viewPacketsDate(agency);
+		clear();
+	}
+	else {
+		viewFilteredPackets(agency);
+	}
+	return 0;
+}
+
+unsigned viewPacketsDestinationDate(Agency agency) {
+	string input, site;
+	vector<string> splitted;
+	vector<Packet> pckts;
+	cout << "Destination: ";
+	getline(cin, site);
+	site = lower(site);
+	cout << "First date (dd/mm/yyyy): ";
+	getline(cin, input);
+	splitted = split(input, "/");
+	while (true) {
+		try {
+			stoi(splitted.at(0));
+			stoi(splitted.at(1));
+			stoi(splitted.at(2));
+			if (!validDate(stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)))) {
+				stoi("erro");
+			}
+			break;
+		}
+		catch (exception) {
+			cout << "'" << input << "' is not a valid date. Insert a valid date: ";
+			getline(cin, input);
+			splitted = split(input, "/");
+		}
+	}
+	Date date1(stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)));
+	cout << "Second date (dd/mm/yyyy): ";
+	getline(cin, input);
+	splitted = split(input, "/");
+	while (true) {
+		try {
+			stoi(splitted.at(0));
+			stoi(splitted.at(1));
+			stoi(splitted.at(2));
+			if (!validDate(stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)))) {
+				stoi("erro");
+			}
+			break;
+		}
+		catch (exception) {
+			cout << "'" << input << "' is not a valid date. Insert a valid date: ";
+			getline(cin, input);
+			splitted = split(input, "/");
+		}
+	}
+	Date date2(stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)));
+	if (date2 < date1) {
+		Date aux = date1;
+		date1 = date2;
+		date2 = aux;
+	}
+	for (unsigned i = 0; i < agency.getPackets().size(); ++i) {
+		for (unsigned j = 0; j < agency.getPackets().at(i).getSites().size(); ++j) {
+			if (agency.getPackets().at(i).getBeginDate() >= date1 && agency.getPackets().at(i).getEndDate() <= date2 && lower(agency.getPackets().at(i).getSites().at(j)) == site) {
+				pckts.push_back(agency.getPackets().at(i));
+				break;
+			}
+		}
+	}
+	clear();
+	if (pckts.size() == 0)
+		cout << "No packet matches this specification\n" << endl;
+	else
+		cout << packetsToTable(pckts) << endl;
+	if (yesOrNo("Another destination and dates?")) {
+		viewPacketsDestinationDate(agency);
+		clear();
+	}
+	else {
+		viewFilteredPackets(agency);
+	}
+	return 0;
+}
+
+unsigned packetSitesRanking(Agency agency) {
+	map<string, int> m; 
+	map<string, int>::const_iterator mi; 
+	pair<string, int> p;
+	for (unsigned i = 0; i < agency.getPackets().size(); ++i) {
+		for (unsigned j = 0; j < agency.getPackets().at(i).getSites().size(); ++j) {
+			m[agency.getPackets().at(i).getSites().at(j)]++;
+		}
+	}
+	int n = 0;
+	clear();
+	for (mi = m.begin(); mi != m.end(); mi++) {
+		n++; 
+		p = *mi;
+		cout << n << " -"<< p.first<< ", "<< p.second<< endl;
+	}
+	pause();
 	return 0;
 }
 
@@ -686,7 +920,7 @@ unsigned editPackets(Agency agency){
 	for (unsigned i = 0; i < agency.getPackets().size(); i++){
 		if (vat == abs(stoi(agency.getPackets().at(i).getId()))){
 			bool change = true;
-			Table table({ "Key", "Change" }, { {"I", "ID"}, {"S", "Sites"}, {"ST", "Start date"}, {"ED", "End Date"}, {"P", "Price per person"} , {"SP", "Sold places"}, {"M", "Max places"}, {"E", "Exit"} });
+			Table table({ "Key", "Change" }, { {"I", "ID"}, {"S", "Sites"}, {"ST", "Start date"}, {"ED", "End Date"}, {"P", "Price per person"} , {"SP", "Sold places"}, {"M", "Max places"}, {"G", "Go back"} });
 			while (change) {
 				clear();
 				cout << packetsToTable({ agency.getPackets().at(i) }) << endl;
@@ -694,7 +928,7 @@ unsigned editPackets(Agency agency){
 				cout << "Choose a field: ";
 				getline(cin, input);
 				input = lower(input);
-				while (input != "i" && input != "s" && input != "st" && input != "ed" && input != "p" && input != "sp" && input != "m" && input != "e") {
+				while (input != "i" && input != "s" && input != "st" && input != "ed" && input != "p" && input != "sp" && input != "m" && input != "g") {
 					clear();
 					cout << packetsToTable({ agency.getPackets().at(i) }) << endl;
 					cout << table << endl;
@@ -812,7 +1046,7 @@ unsigned editPackets(Agency agency){
 						}
 					}
 					pckts.at(i).setMaxPlaces(stoi(new_field));
-				}else if (input == "e") {
+				}else if (input == "g") {
 					break;
 					return 0;
 				}

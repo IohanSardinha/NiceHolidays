@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#define epoch 2000
+#define epoch 1900
 using namespace std;
 class Date {														// Class that represents a date (day, month and year)
 	private:														// Private methods and atributes
