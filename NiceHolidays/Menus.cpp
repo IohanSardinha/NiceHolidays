@@ -421,9 +421,69 @@ unsigned buyPacket(Agency agency)
 		Client c = agency.getClients().at(i);
 		if (vat == c.getVATnumber())
 		{
-			clear();
-			//PENDENT INPLEMENTATION
-			manageClients(agency);
+			cout << "Client " << c.getName() << " found" << endl;
+
+			do
+			{
+				cout << "Package ID(0 to exit):";
+				getline(cin, input);
+
+				while (true)
+				{
+					if (input == "0")
+					{
+						manageClients(agency);
+						return 0;
+					}
+					try
+					{
+						stoi(input);
+						break;
+					}
+					catch (exception)
+					{
+						cout << input << " is not a valid ID. Insert a valid integer(0 to exit):";
+						getline(cin, input);
+					}
+				}
+
+				Packet packet = getPacketById(agency.getPackets(), stoi(input));
+				
+				if (!packet.isEmpty() && packet.isAvailable() && !c.hasPacket(packet))
+				{
+					clear();
+					cout << packetsToTable({ packet }) << endl;
+					cout << "Should " << c.getName() << " buy packet " << packet.getId() << "? (y/n): ";
+					getline(cin, input);
+					if (input == "y")
+					{
+						vector<Client> cs = agency.getClients();
+						vector<Packet> pckts = c.getPacketList();
+						pckts.push_back(packet);
+						cs.at(i).setPacketList(pckts);
+						agency.setClients(cs);
+
+						cout << c.getName() << " bought packet " << packet.getId() << endl;
+					}
+					else
+						cout << c.getName() << " did not buy packet" << endl;
+					pause();
+					manageClients(agency);
+					return 0;
+				}
+				else if(!packet.isAvailable())
+				{
+					cout << "Packet " << input << " is not available" << endl;
+				}
+				else if (c.hasPacket(packet))
+				{
+					cout << c.getName() << " already bought packet " << packet.getId() << endl;
+				}
+				else
+					cout << "Packet " << input << " not found" << endl;
+
+			} while (true);
+			
 			return 0;
 		}
 	}

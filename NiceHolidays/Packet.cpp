@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------------
 Packet::Packet() 
 {
+	empty = true;
 }
 
 Packet::Packet(bool id,int nothing) 
@@ -37,6 +38,22 @@ string Packet::getId() const {
 	return id;
 }
 
+bool Packet::isEmpty() const
+{
+	return empty;
+}
+
+bool Packet::isAvailable() const
+{
+	if (isEmpty())
+		return false;
+
+	if (stoi(id) >= 0)
+		return true;
+	
+	return false;
+}
+
 unsigned long Packet::getNumPackets() const
 {
 	return numPackets;
@@ -64,6 +81,7 @@ unsigned Packet::getMaxPlaces() const {
 //                                           Sets                                          
 // ----------------------------------------------------------------------------------------
 bool Packet::setId(string i) {
+	empty = false;
 	id = i;
 	return true;
 }
