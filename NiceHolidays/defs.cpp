@@ -66,6 +66,9 @@ void pause()
 
 string lstrip(string s) {
 	int i = 0;
+	if (s.length() == 0) {
+		return "";
+	}
 	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	') {
 		i++;
 	}
@@ -74,6 +77,9 @@ string lstrip(string s) {
 
 string rstrip(string s) {
 	int i = s.length() - 1;
+	if (s.length() == 0) {
+		return "";
+	}
 	while (s[i] == ' ' || s[i] == '\n' || s[i] == '	') {
 		i--;
 	}

@@ -54,6 +54,15 @@
 	return Table(header, packets);
 }
 
+ bool yesOrNo(string question) {
+	 string option;
+	 cout << question << " (y/n) ";
+	 getline(cin, option);
+	 if (option == "y" || option == "Y")
+		 return true;
+	return false;
+ }
+
 // ----------------------------------------------------------------------------------------
 //                                       Main
 // ----------------------------------------------------------------------------------------
@@ -440,15 +449,15 @@ unsigned managePackets(Agency agency)
 	clear();
 	Table table({ "Key", "Action" }, { { "V", "View packets" },{ "P", "Packets sold to client" },{ "E", "Edit packets" },{ "N", "New packet" },{ "C", "Close packet" } ,{ "G","Go Back" } });
 	cout << table << endl;
-	cout << "Choose an action:";
+	cout << "Choose an action: ";
 	string input;
 	getline(cin, input);
 	input = lower(input);
-	while (input != "v" && input != "e" && input != "n" && input != "c" && input != "b" && input != "g")
+	while (input != "v" && input != "e" && input != "n" && input != "c" && input != "b" && input != "g" && input != "p")
 	{
 		clear();
 		cout << table << endl;
-		cout << "'" << input << "' is not a valid action key, choose a valid action:";
+		cout << "'" << input << "' is not a valid action key, choose a valid action: ";
 		getline(cin, input);
 		input = lower(input);
 	}
@@ -459,7 +468,7 @@ unsigned managePackets(Agency agency)
 	}
 	else if (input == "e")
 	{
-		editClients(agency);
+		editPackets(agency);
 	}
 	else if (input == "n")
 	{
@@ -545,9 +554,169 @@ unsigned newPacket(Agency agency) {
 	return 0;
 }
 
-unsigned editPackets(Agency agency)
-{
-	clear();
+unsigned editPackets(Agency agency){
+	string input;
+	cout << "Packet ID (0 to exit): ";
+	getline(cin, input);
+	int vat;
+	while (true){
+		try{
+			vat = stoi(input);
+			break;
+		}catch (exception){
+			cout << "'" << input << "' is not a valid ID. Insert a valid integer (0 to exit): ";
+			getline(cin, input);
+		}
+	}
+	if (vat == 0){
+		managePackets(agency);
+		return 0;
+	}
+	for (unsigned i = 0; i < agency.getPackets().size(); i++){
+		if (vat == abs(stoi(agency.getPackets().at(i).getId()))){
+			bool change = true;
+			Table table({ "Key", "Change" }, { {"I", "ID"}, {"S", "Sites"}, {"ST", "Start date"}, {"ED", "End Date"}, {"P", "Price per person"} , {"SP", "Sold places"}, {"M", "Max places"}, {"E", "Exit"} });
+			while (change) {
+				clear();
+				cout << packetsToTable({ agency.getPackets().at(i) }) << endl;
+				cout << table << endl;
+				cout << "Choose a field: ";
+				getline(cin, input);
+				input = lower(input);
+				while (input != "i" && input != "s" && input != "st" && input != "ed" && input != "p" && input != "sp" && input != "m" && input != "e") {
+					clear();
+					cout << packetsToTable({ agency.getPackets().at(i) }) << endl;
+					cout << table << endl;
+					cout << "'" << input << "' is not a valid field, choose a valid field: ";
+					getline(cin, input);
+					input = lower(input);
+				}
+				string new_field;
+				vector<Packet> pckts = agency.getPackets();
+				if (input == "i") {
+					if (stoi(pckts.at(i).getId()) > 0) {
+						if(yesOrNo("Make it unavailable?"))
+							pckts.at(i).setId(to_string(-stoi(pckts.at(i).getId())));
+					} else {
+						if (yesOrNo("Make it available?"))
+							pckts.at(i).setId(to_string(-stoi(pckts.at(i).getId())));
+					}
+				}else if (input == "s") {
+					cout << "New sites: ";
+					getline(cin, new_field);
+					vector<string> splitted = strip(split(new_field, "-"));
+					if (splitted.size() > 1) {
+						vector<string> v = { splitted.at(0) };
+						vector<string> v2 = strip(split(splitted.at(1), ","));
+						v2.insert(v2.begin(), v.begin(), v.end());
+						pckts.at(i).setSites(v2);
+					} else {
+						pckts.at(i).setSites({ splitted.at(0) });
+					}
+				}else if (input == "st") {
+					cout << "New start date: ";
+					getline(cin, new_field);
+					vector<string> splitted = split(new_field, "/");
+					while (true){
+						try{
+							stoi(splitted.at(0));
+							stoi(splitted.at(1));
+							stoi(splitted.at(2));
+							if (!validDate(stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)))) {
+								stoi("erro");
+							}
+							break;
+						}catch (exception){
+							cout << "'" << new_field << "' is not a valid date. Insert a valid date: ";
+							getline(cin, new_field);
+							splitted = split(new_field, "/");
+						}
+					}
+					vector<int> new_date = { stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)) };
+					pckts.at(i).setBeginDate(Date(new_date.at(0), new_date.at(1), new_date.at(2)));
+				}else if (input == "ed") {
+					cout << "New end date: ";
+					getline(cin, new_field);
+					vector<string> splitted = split(new_field, "/");
+					while (true) {
+						try {
+							stoi(splitted.at(0));
+							stoi(splitted.at(1));
+							stoi(splitted.at(2));
+							if (!validDate(stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)))) {
+								stoi("erro");
+							}
+							break;
+						}
+						catch (exception) {
+							cout << "'" << new_field << "' is not a valid date. Insert a valid date: ";
+							getline(cin, new_field);
+							splitted = split(new_field, "/");
+						}
+					}
+					vector<int> new_date = { stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)) };
+					pckts.at(i).setEndDate(Date(new_date.at(0), new_date.at(1), new_date.at(2)));
+				}else if (input == "p") {
+					cout << "New price per person: ";
+					getline(cin, new_field);
+					while (true) {
+						try {
+							if (stof(new_field) < 0)
+								stoi("erro");
+							break;
+						}
+						catch (exception) {
+							cout << "'" << new_field << "' is not a valid price. Insert a valid non-negative float: ";
+							getline(cin, new_field);
+						}
+					}
+					pckts.at(i).setPricePerPerson(stod(new_field));
+				}else if (input == "sp") {
+					cout << "New sold places: ";
+					getline(cin, new_field);
+					while (true) {
+						try {
+							if(stoi(new_field) < 0)
+								stoi("erro");
+							break;
+						}
+						catch (exception) {
+							cout << "'" << new_field << "' is not a valid number. Insert a valid non-negative integer: ";
+							getline(cin, new_field);
+						}
+					}
+					pckts.at(i).setSoldPlaces(stoi(new_field));
+				}else if (input == "m") {
+					cout << "New max places: ";
+					getline(cin, new_field);
+					while (true) {
+						try {
+							if (stoi(new_field) < 0)
+								stoi("erro");
+							break;
+						}
+						catch (exception) {
+							cout << "'" << new_field << "' is not a valid number. Insert a valid non-negative integer: ";
+							getline(cin, new_field);
+						}
+					}
+					pckts.at(i).setMaxPlaces(stoi(new_field));
+				}else if (input == "e") {
+					break;
+					return 0;
+				}
+				agency.setPackets(pckts);
+				change = yesOrNo("Change another field?");
+			}
+			clear();
+			cout << packetsToTable({ agency.getPackets().at(i) }) << endl;
+			pause();
+			managePackets(agency);
+			return 0;
+		}
+	}
+	cout << "Packet '" << input << "' not found" << endl;
+	editPackets(agency);
 	return 0;
 }
 

@@ -64,12 +64,16 @@ unsigned Packet::getMaxPlaces() const {
 //                                           Sets                                          
 // ----------------------------------------------------------------------------------------
 bool Packet::setId(string i) {
+	try{
+		stoi(i);
+	}catch (exception){
+		return false;
+	}
 	id = i;
 	return true;
 }
 
-bool Packet::setNumPacket(unsigned long n)
-{
+bool Packet::setNumPacket(unsigned long n){
 	numPackets = n;
 	return true;
 }

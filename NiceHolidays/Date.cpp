@@ -14,41 +14,37 @@ Date::Date(unsigned short d) {
 	time_t t = time(0);
 	unsigned y = localtime(&t) -> tm_year + 1900;
 	unsigned short m = localtime(&t) -> tm_mon + 1;
-	if (!validDate(d, m, y)){
-		throw invalid_argument(to_string(y) + "/" + to_string(m) + "/" + to_string(d) + " is not a possible date");
+	if (validDate(d, m, y)){
+		year = y;
+		month = m;
+		day = d;
 	}
-	year = y;
-	month = m;
-	day = d;
 }
 Date::Date(unsigned short d, unsigned short m) {
 	time_t t = time(0);
 	unsigned y = localtime(&t) -> tm_year + 1900;
-	if (!validDate(d, m, y)){
-		throw invalid_argument(to_string(d) + "/" + to_string(m) + "/" + to_string(y) + " is not a possible date");
+	if (validDate(d, m, y)){
+		year = y;
+		month = m;
+		day = d;
 	}
-	year = y;
-	month = m;
-	day = d;
 }
 Date::Date(unsigned short d, unsigned short m, unsigned y) {
-	if (!validDate(d, m, y)){
-		throw invalid_argument(to_string(y) + "/" + to_string(m) + "/" + to_string(d) + " is not a possible date");
+	if (validDate(d, m, y)){
+		year = y;
+		month = m;
+		day = d;
 	}
-	year = y;
-	month = m;
-	day = d;
 }
 Date::Date(string s) {
 	unsigned y = stoi(s.substr(0, 4));
 	unsigned short m = stoi(s.substr(5, 2));
 	unsigned short d = stoi(s.substr(8, 2));
-	if (!validDate(d, m, y)){
-		throw invalid_argument(to_string(y) + "/" + to_string(m) + "/" + to_string(d) + " is not a possible date");
+	if (validDate(d, m, y)){
+		year = y;
+		month = m;
+		day = d;
 	}
-	year = y;
-	month = m;
-	day = d;
 }
 // ----------------------------------------------------------------------------------------
 //                                           Gets                                          
