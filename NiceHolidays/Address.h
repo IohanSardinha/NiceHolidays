@@ -13,21 +13,21 @@ class Address{
 		string floor; 												// floor number ("-" is not applicable)
 		string postalCode; 											// postal code
 		string location; 											// site
-	public:															// 
-		Address();													// 
-		Address(vector<string>);
-		Address(string, unsigned short, string, string, string);	// 
-		string getStreet() const;									// 
-		unsigned short getDoorNumber() const;						// 
-		string getFloor() const;									// 
-		string getPostalCode() const;								// 
-		string getLocation() const;									// 
-		bool setStreet(string);										// 
-		bool setDoorNumber(unsigned short);							// 
-		bool setFloor(string);										// 
-		bool setPostalCode(string);									// 
-		bool setLocation(string);									// 
-		friend ostream& operator<<(ostream&, const Address&);		// 
-		friend ofstream& operator<<(ofstream&, const Address&);		// 
+	public:
+		Address();													// Empty Constructor 
+		Address(vector<string>);									// Constructor from a vector
+		Address(string, unsigned short, string, string, string);	// Constructor from filtered data
+		string getStreet() const;									// Returns the street
+		unsigned short getDoorNumber() const;						// Returns the number
+		string getFloor() const;									// Returns the floor
+		string getPostalCode() const;								// Returns the postal code
+		string getLocation() const;									// Returns location
+		bool setStreet(string);										// Sets street
+		bool setDoorNumber(unsigned short);							// Sets number
+		bool setFloor(string);										// Sets floor
+		bool setPostalCode(string);									// Sets postal code
+		bool setLocation(string);									// Sets location
+		friend ostream& operator<<(ostream&, const Address&);		// Prints an address in a nice way
+		friend ofstream& operator<<(ofstream&, const Address&);		// Puts a formated address in a file
 };
 string str(Address address);

@@ -21,7 +21,7 @@ class Date {														// Class that represents a date (day, month and year)
 		bool setDay(unsigned short);								// Changes the day of the date, returns false if the date is not possible
 		bool setMonth(unsigned short);								// Changes the month of the date, returns false if the date is not possible
 		bool setYear(unsigned);										// Changes the year of the date, returns false if the date is not possible
-		friend ostream& operator<<(ostream&, const Date&);			// 
+		friend ostream& operator<<(ostream&, const Date&);			// Prints a date in a nice way
 		Date operator+(unsigned) const;								// Returns n days after the date
 		Date operator-(unsigned) const;								// Returns n days before the date
 		void operator+=(unsigned);									// Turns the date into the date after n days

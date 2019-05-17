@@ -1261,8 +1261,13 @@ unsigned newPacket(Agency agency) {
 	Packet p(false, '?');
 	clear();
 	cout << packetsToTable({p}) << '\n';
-	cout << "Packet Sites: ";
+	cout << "Packet Sites(0 to exit): ";
 	getline(cin, input);
+	if (input == "0")
+	{
+		managePackets(agency);
+		return 0;
+	}
 	vector<string> splitted = strip(split(input, "-"));
 	if (splitted.size() > 1) {
 		vector<string> v = { splitted.at(0) };
@@ -1274,27 +1279,47 @@ unsigned newPacket(Agency agency) {
 	}
 	clear();
 	cout << packetsToTable({p}) << '\n';
-	cout << "Packet Start Date (dd/mm/yyyy): ";
+	cout << "Packet Start Date (dd/mm/yyyy)(0 to exit): ";
 	getline(cin, input);
+	if (input == "0")
+	{
+		managePackets(agency);
+		return 0;
+	}
 	splitted = split(input, "/");
 	vector<int> new_date = { stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)) };
 	p.setBeginDate(Date(new_date.at(0), new_date.at(1), new_date.at(2)));
 	clear();
 	cout << packetsToTable({ p }) << '\n';
-	cout << "Packet End Date (dd/mm/yyyy): ";
+	cout << "Packet End Date (dd/mm/yyyy)(0 to exit): ";
 	getline(cin, input);
+	if (input == "0")
+	{
+		managePackets(agency);
+		return 0;
+	}
 	splitted = split(input, "/");
 	new_date = { stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)) };
 	p.setEndDate(Date(new_date.at(0), new_date.at(1), new_date.at(2)));
 	clear();
 	cout << packetsToTable({ p }) << '\n';
-	cout << "Packet Price per Person: ";
+	cout << "Packet Price per Person(0 to exit): ";
 	getline(cin, input);
+	if (input == "0")
+	{
+		managePackets(agency);
+		return 0;
+	}
 	p.setPricePerPerson(stod(input));
 	clear();
 	cout << packetsToTable({ p }) << '\n';
-	cout << "Packet Max Places: ";
+	cout << "Packet Max Places(0 to exit): ";
 	getline(cin, input);
+	if (input == "0")
+	{
+		managePackets(agency);
+		return 0;
+	}
 	p.setMaxPlaces(stoi(input));
 	clear();
 	cout << packetsToTable({ p }) << '\n';
@@ -1336,13 +1361,23 @@ unsigned editPackets(Agency agency){
 				cout << table << endl;
 				cout << "Choose a field: ";
 				getline(cin, input);
+				if (input == "0")
+				{
+					managePackets(agency);
+					return 0;
+				}
 				input = lower(input);
 				while (input != "i" && input != "s" && input != "st" && input != "ed" && input != "p" && input != "sp" && input != "m" && input != "g") {
 					clear();
 					cout << packetsToTable({ agency.getPackets().at(i) }) << endl;
 					cout << table << endl;
-					cout << "'" << input << "' is not a valid field, choose a valid field: ";
+					cout << "'" << input << "' is not a valid field, choose a valid field(0 to exit): ";
 					getline(cin, input);
+					if (input == "0")
+					{
+						managePackets(agency);
+						return 0;
+					}
 					input = lower(input);
 				}
 				string new_field;
@@ -1356,8 +1391,13 @@ unsigned editPackets(Agency agency){
 							pckts.at(i).setId(to_string(-stoi(pckts.at(i).getId())));
 					}
 				}else if (input == "s") {
-					cout << "New sites: ";
+					cout << "New sites(0 to exit): ";
 					getline(cin, new_field);
+					if (new_field == "0")
+					{
+						managePackets(agency);
+						return 0;
+					}
 					vector<string> splitted = strip(split(new_field, "-"));
 					if (splitted.size() > 1) {
 						vector<string> v = { splitted.at(0) };
@@ -1368,8 +1408,13 @@ unsigned editPackets(Agency agency){
 						pckts.at(i).setSites({ splitted.at(0) });
 					}
 				}else if (input == "st") {
-					cout << "New start date: ";
+					cout << "New start date(0 to exit): ";
 					getline(cin, new_field);
+					if (new_field == "0")
+					{
+						managePackets(agency);
+						return 0;
+					}
 					vector<string> splitted = split(new_field, "/");
 					while (true){
 						try{
@@ -1381,16 +1426,26 @@ unsigned editPackets(Agency agency){
 							}
 							break;
 						}catch (exception){
-							cout << "'" << new_field << "' is not a valid date. Insert a valid date: ";
+							cout << "'" << new_field << "' is not a valid date. Insert a valid date(0 to exit): ";
 							getline(cin, new_field);
+							if (new_field == "0")
+							{
+								managePackets(agency);
+								return 0;
+							}
 							splitted = split(new_field, "/");
 						}
 					}
 					vector<int> new_date = { stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)) };
 					pckts.at(i).setBeginDate(Date(new_date.at(0), new_date.at(1), new_date.at(2)));
 				}else if (input == "ed") {
-					cout << "New end date: ";
+					cout << "New end date(0 to exit): ";
 					getline(cin, new_field);
+					if (new_field == "0")
+					{
+						managePackets(agency);
+						return 0;
+					}
 					vector<string> splitted = split(new_field, "/");
 					while (true) {
 						try {
@@ -1403,16 +1458,26 @@ unsigned editPackets(Agency agency){
 							break;
 						}
 						catch (exception) {
-							cout << "'" << new_field << "' is not a valid date. Insert a valid date: ";
+							cout << "'" << new_field << "' is not a valid date. Insert a valid date(0 to exit): ";
 							getline(cin, new_field);
+							if (new_field == "0")
+							{
+								managePackets(agency);
+								return 0;
+							}
 							splitted = split(new_field, "/");
 						}
 					}
 					vector<int> new_date = { stoi(splitted.at(0)), stoi(splitted.at(1)), stoi(splitted.at(2)) };
 					pckts.at(i).setEndDate(Date(new_date.at(0), new_date.at(1), new_date.at(2)));
 				}else if (input == "p") {
-					cout << "New price per person: ";
+					cout << "New price per person(0 to exit): ";
 					getline(cin, new_field);
+					if (new_field == "0")
+					{
+						managePackets(agency);
+						return 0;
+					}
 					while (true) {
 						try {
 							if (stof(new_field) < 0)
@@ -1420,14 +1485,24 @@ unsigned editPackets(Agency agency){
 							break;
 						}
 						catch (exception) {
-							cout << "'" << new_field << "' is not a valid price. Insert a valid non-negative float: ";
+							cout << "'" << new_field << "' is not a valid price. Insert a valid non-negative float(0 to exit): ";
 							getline(cin, new_field);
+							if (new_field == "0")
+							{
+								managePackets(agency);
+								return 0;
+							}
 						}
 					}
 					pckts.at(i).setPricePerPerson(stod(new_field));
 				}else if (input == "sp") {
-					cout << "New sold places: ";
+					cout << "New sold places(0 to exit): ";
 					getline(cin, new_field);
+					if (new_field == "0")
+					{
+						managePackets(agency);
+						return 0;
+					}
 					while (true) {
 						try {
 							if(stoi(new_field) < 0)
@@ -1435,14 +1510,24 @@ unsigned editPackets(Agency agency){
 							break;
 						}
 						catch (exception) {
-							cout << "'" << new_field << "' is not a valid number. Insert a valid non-negative integer: ";
+							cout << "'" << new_field << "' is not a valid number. Insert a valid non-negative integer(0 to exit): ";
 							getline(cin, new_field);
+							if (new_field == "0")
+							{
+								managePackets(agency);
+								return 0;
+							}
 						}
 					}
 					pckts.at(i).setSoldPlaces(stoi(new_field));
 				}else if (input == "m") {
-					cout << "New max places: ";
+					cout << "New max places(0 to exit): ";
 					getline(cin, new_field);
+					if (new_field == "0")
+					{
+						managePackets(agency);
+						return 0;
+					}
 					while (true) {
 						try {
 							if (stoi(new_field) < 0)
@@ -1450,8 +1535,13 @@ unsigned editPackets(Agency agency){
 							break;
 						}
 						catch (exception) {
-							cout << "'" << new_field << "' is not a valid number. Insert a valid non-negative integer: ";
+							cout << "'" << new_field << "' is not a valid number. Insert a valid non-negative integer(0 to exit): ";
 							getline(cin, new_field);
+							if (new_field == "0")
+							{
+								managePackets(agency);
+								return 0;
+							}
 						}
 					}
 					pckts.at(i).setMaxPlaces(stoi(new_field));

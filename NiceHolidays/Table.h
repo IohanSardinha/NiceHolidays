@@ -6,16 +6,16 @@
 using namespace std;
 class Table{
 	private:
-		vector<string> header;										//
-		vector<vector<string>> content;								//
+		vector<string> header;										//The data of the header of the table
+		vector<vector<string>> content;								//The data of the table itself
 	public:
-		Table();												// 
-		Table(vector<string>, vector<vector<string>>);		// 
-		vector<string> getHeader() const;					//
-		vector<vector<string>> getContent() const;			//
-		bool setHeader(vector<string>);						//
-		bool setContent(vector<vector<string>>);				//
-		friend ostream& operator<<(ostream&, const Table&);	// 
+		Table();													//Empty constructor
+		Table(vector<string>, vector<vector<string>>);				//Constructor taking the header and the content
+		vector<string> getHeader() const;							//Getter for the header
+		vector<vector<string>> getContent() const;					//Getter for the content
+		bool setHeader(vector<string>);								//Setter for the header
+		bool setContent(vector<vector<string>>);					//Setter for the content
+		friend ostream& operator<<(ostream&, const Table&);			//Overload of the operator << Makes it possible to do 'cout << Table'
 };
-string normalize(string s, unsigned n);								//
-string str(Table table);
+string normalize(string s, unsigned n);								//Insert spaces btween a string so it gets to a precise size to fit on the table
+string str(Table table);											//Turns table into a string

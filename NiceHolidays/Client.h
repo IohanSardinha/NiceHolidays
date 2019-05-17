@@ -20,20 +20,20 @@ class Client{
 		Client();
 		Client(string, unsigned, unsigned short, Address);  							// for a new client
 		Client(string, unsigned, unsigned short, Address, vector<Packet>&, unsigned);  	// client read from file
-		string getName() const;
-		unsigned getVATnumber() const;
-		unsigned short getFamilySize() const;
-		Address getAddress() const;
-		vector<Packet> getPacketList() const;
-		unsigned getTotalPurchased() const;
-		bool hasPacket(Packet) const;
-		bool setName(string);
-		bool setVATnumber(unsigned);
-		bool setFamilySize(unsigned short);
-		bool setAddress(Address);
-		bool setPacketList(vector<Packet>&);
-		bool setTotalPurchased(unsigned);
-		friend ostream& operator<<(ostream&, const Client&);
-		friend ofstream& operator<<(ofstream&, const Client&);
+		string getName() const;															//Getter for name
+		unsigned getVATnumber() const;													//Getter for VAT number
+		unsigned short getFamilySize() const;											//Getter for family
+		Address getAddress() const;														//Getter for Address
+		vector<Packet> getPacketList() const;											//Getter for packet list
+		unsigned getTotalPurchased() const;												//Getter for total purchased
+		bool hasPacket(Packet) const;													//Returns true if client has subscribed to given packet
+		bool setName(string);															//Setter for name
+		bool setVATnumber(unsigned);													//Setter for VAT number
+		bool setFamilySize(unsigned short);												//Setter for family size
+		bool setAddress(Address);														//Setter for Address
+		bool setPacketList(vector<Packet>&);											//Setter for packet list
+		bool setTotalPurchased(unsigned);												//Setter for total purchased
+		friend ostream& operator<<(ostream&, const Client&);							//Overload of operator <<
+		friend ofstream& operator<<(ofstream&, const Client&);							//Overload of operator <<
 };
-string str(Client client);
+string str(Client client);																//Turns client into string
